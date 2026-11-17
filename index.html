@@ -1,0 +1,1103 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><meta name="theme-color" content="#1F3437"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Rolli-Kids"><script src="supabase.js"></script><script src="rk.js"></script></head><body>
+<title>Rolli-Kids-Lexikon</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:wght@600;700&display=swap">
+<style>
+/* Layout: Kopf mit vier Ansichten (Start, Lexikon, Bauen, Für heute); Fahr-Pass ausgeblendet, Daten bleiben; Lexikon = Suche, aufklappbare Filter, Karten nach Kategorie mit Taktiktafel */
+:root{
+  --help:#C026D3; --help-s:#FAE8FF; --bg:#F2F5F6; --surface:#FFFFFF; --fg:#16282B; --muted:#5B6E72; --line:#D5DEE0;
+  --accent:#1F3437; --accent-fg:#FFFFFF; --accent-soft:#E2E8E9;
+  --team1:#00897B; --team2:#5E35B1; --catch:#D84315; --cone:#F2A01E; --path:#1F3437; --mat:#C9D3D5; --rope:#8D6E63; --ok:#2E7D32; --warn:#B26A00; --warn-s:#FFF1D6; --arm:#0B6E8A; --arm-s:#DDF1F7;
+  --c1:#C62828;--s1:#FDE0DE;--c2:#D35400;--s2:#FFE6D1;--c3:#9A7400;--s3:#FFF1BF;--c4:#4C8C1A;--s4:#E4F5D3;--c5:#00897B;--s5:#D2F2EE;--c6:#0277BD;--s6:#D6EEFB;--c7:#283FB5;--s7:#DEE3FB;--c8:#7B3FC4;--s8:#EDE1FB;--c9:#B5257C;--s9:#FBDDEE;--c10:#7A4E2D;--s10:#EFE3D8;--c11:#4F5B66;--s11:#E3E7EA;--c12:#1565C0;--s12:#DCEAFB;--c13:#AD1457;--s13:#FADCE8;--c14:#5D6B00;--s14:#EEF2C8;--c15:#00838F;--s15:#D4F3F6;--c16:#2E7D32;--s16:#DDF0DE;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--help:#E879F9; --help-s:#4A1259;
+  --bg:#0F1A1C; --surface:#172528; --fg:#E6EFF0; --muted:#97ABAF; --line:#2C3F43;
+  --accent:#E6EFF0; --accent-fg:#0F1A1C; --accent-soft:#2C3F43;
+  --team1:#4DD0BE; --team2:#B39DDB; --catch:#FF8A65; --cone:#FFC14D; --path:#E6EFF0; --mat:#3A4D51; --rope:#BCAAA4; --ok:#81C784; --warn:#FFB74D; --warn-s:#3D2C0E; --arm:#7FD3EC; --arm-s:#123642;
+  --c1:#FF8A80;--s1:#4A1C1A;--c2:#FFAB6E;--s2:#4A2810;--c3:#F2CC4D;--s3:#403410;--c4:#A5DC7A;--s4:#22381A;--c5:#5FD6C6;--s5:#113B36;--c6:#6CC4F5;--s6:#10334A;--c7:#95A7F7;--s7:#1C2552;--c8:#C4A0F5;--s8:#2F1D4D;--c9:#F28BC6;--s9:#4A1835;--c10:#D9A884;--s10:#3A2A1E;--c11:#AAB6C2;--s11:#2A3138;--c12:#8CB8F2;--s12:#14284A;--c13:#F48FB1;--s13:#4A1630;--c14:#C5D86A;--s14:#2E3510;--c15:#5FD3E0;--s15:#103A40;--c16:#8FD694;--s16:#173A1A;
+  color-scheme:dark}}
+:root[data-theme="dark"]{--help:#E879F9; --help-s:#4A1259;
+  --bg:#0F1A1C; --surface:#172528; --fg:#E6EFF0; --muted:#97ABAF; --line:#2C3F43;
+  --accent:#E6EFF0; --accent-fg:#0F1A1C; --accent-soft:#2C3F43;
+  --team1:#4DD0BE; --team2:#B39DDB; --catch:#FF8A65; --cone:#FFC14D; --path:#E6EFF0; --mat:#3A4D51; --rope:#BCAAA4; --ok:#81C784; --warn:#FFB74D; --warn-s:#3D2C0E; --arm:#7FD3EC; --arm-s:#123642;
+  --c1:#FF8A80;--s1:#4A1C1A;--c2:#FFAB6E;--s2:#4A2810;--c3:#F2CC4D;--s3:#403410;--c4:#A5DC7A;--s4:#22381A;--c5:#5FD6C6;--s5:#113B36;--c6:#6CC4F5;--s6:#10334A;--c7:#95A7F7;--s7:#1C2552;--c8:#C4A0F5;--s8:#2F1D4D;--c9:#F28BC6;--s9:#4A1835;--c10:#D9A884;--s10:#3A2A1E;--c11:#AAB6C2;--s11:#2A3138;--c12:#8CB8F2;--s12:#14284A;--c13:#F48FB1;--s13:#4A1630;--c14:#C5D86A;--s14:#2E3510;--c15:#5FD3E0;--s15:#103A40;--c16:#8FD694;--s16:#173A1A;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:860px;margin:0 auto}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(26px,5vw,34px);line-height:1.1;margin:0 0 4px;text-wrap:balance}
+h2{font-family:var(--f-display);font-weight:700;font-size:22px;margin:0 0 6px;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 14px;max-width:65ch}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 18px}
+.nav button{font:inherit;font-weight:700;color:var(--fg);background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer}
+.nav button[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.cnt{display:inline-block;min-width:20px;padding:0 6px;margin-left:4px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:13px;text-align:center;font-variant-numeric:tabular-nums}
+.nav button[aria-current="page"] .cnt{background:var(--accent-fg);color:var(--accent)}
+.search{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap}
+.search input{flex:1 1 220px;min-width:0;font:inherit;color:var(--fg);background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:11px 14px}
+input:focus-visible,select:focus-visible,textarea:focus-visible,.chip:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn{font:inherit;font-weight:700;color:var(--accent-fg);background:var(--accent);border:0;border-radius:10px;padding:10px 16px;cursor:pointer;white-space:nowrap}
+.btn2{font:inherit;font-weight:700;color:var(--accent);background:var(--surface);border:1.5px solid var(--accent);border-radius:10px;padding:8px 14px;cursor:pointer}
+.btn3{font:inherit;font-size:14px;color:var(--fg);background:var(--bg);border:1.5px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer}
+.btn3[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+button:disabled{opacity:.5;cursor:default}
+.filters{display:grid;gap:6px;margin:0 0 14px}
+.fg{background:var(--surface);border:1.5px solid var(--line);border-radius:10px}
+.fg>summary{list-style:none;cursor:pointer;padding:8px 12px;font-weight:700;font-size:14px;display:flex;gap:8px;align-items:center}
+.fg>summary::-webkit-details-marker{display:none}
+.fg>summary::before{content:"";width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .15s}
+.fg[open]>summary::before{transform:rotate(45deg)}
+.fg .on{font-size:12px;font-weight:700;color:var(--accent-fg);background:var(--accent);border-radius:999px;padding:0 8px}
+.fg .fb{padding:0 12px 12px;display:grid;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:14px;color:var(--fg);background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:4px 11px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg);font-weight:700}
+.chip.kc{border-color:var(--ks);background:var(--ks);color:var(--kc)}
+.chip.kc[aria-pressed="true"]{background:var(--kc);border-color:var(--kc);color:var(--bg)}
+.mode{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:14px;color:var(--muted)}
+.bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px 10px;margin:0 0 12px;color:var(--muted);font-size:14px}
+.bar .acts{display:flex;gap:4px;flex-wrap:wrap}
+.link{font:inherit;font-size:14px;color:var(--accent);background:none;border:0;text-decoration:underline;cursor:pointer;padding:4px}
+.cat{font-family:var(--f-display);font-weight:600;font-size:17px;margin:22px 0 8px;background:var(--kc);color:var(--bg);padding:7px 16px;border-radius:999px;width:fit-content;scroll-margin-top:60px;display:flex;gap:8px;align-items:center}.cat .ic{stroke:var(--bg)}
+.card{background:var(--surface);border:1.5px solid var(--line);border-radius:14px;margin:0 0 8px}.card[open]{background:var(--surface);border-color:var(--kc)}.card.ueb{background:var(--surface);border:2px dashed var(--kc)}.ic{width:20px;height:20px;flex:none;fill:none;stroke:var(--kc);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.cmeta{font-size:13px;color:var(--muted);margin:3px 0 0}
+.card>summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;gap:12px;align-items:center}.cb{flex:1;min-width:0}.thumb{flex:none;width:120px;background:var(--ks);border-radius:10px;overflow:hidden}.thumb svg{width:100%;height:auto;display:block}.jump{display:flex;flex-wrap:wrap;gap:6px;padding:4px 0;margin:0 0 10px}.jb[aria-pressed="true"]{outline:2.5px solid var(--kc);outline-offset:1px}.jump:empty{display:none}body.help [data-tip]::after{content:"ⓘ " attr(data-tip);display:block;width:fit-content;font-size:12px;font-weight:700;line-height:1.3;margin-top:4px;padding:2px 7px;border-radius:6px;background:var(--help);color:var(--surface);white-space:normal;text-align:left;text-decoration:none;max-width:26ch}#helpbtn[aria-pressed="true"]{background:var(--help);border-color:var(--help);color:var(--surface)}body.help .jb{width:auto;border-radius:999px;padding:0 12px 0 9px;gap:6px;color:var(--kc);font:inherit;font-size:13px;font-weight:700}body.help .jb::after{content:attr(aria-label)}.helpbox{display:none}body.help .helpbox{display:grid;gap:4px;background:var(--help-s);border-radius:12px;padding:10px 12px;margin:0 0 12px;font-size:14px}#helpbtn{float:right;margin-top:4px;display:inline-flex;gap:5px;align-items:center;--kc:currentColor}#helpbtn .ic{width:16px;height:16px}#themebtn{float:right;margin:4px 6px 0 0;display:inline-flex;gap:5px;align-items:center;--kc:currentColor}#themebtn .ic{width:16px;height:16px}.jb{flex:none;width:38px;height:38px;border-radius:50%;border:0;background:var(--ks);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}.card[open] .thumb{display:none}.tags{align-items:center}.mk{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 9px}.mk .ic{width:15px;height:15px}@media (max-width:480px){.thumb{width:88px}}
+.card>summary::-webkit-details-marker{display:none}
+.card h3{font-family:var(--f-display);font-weight:600;font-size:17px;margin:0;display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center}
+.card h3::after{content:"";width:8px;height:8px;border-right:2px solid var(--kc);border-bottom:2px solid var(--kc);transform:rotate(45deg);transition:transform .15s;margin-left:auto;flex:none}
+.card[open] h3::after{transform:rotate(-135deg)}
+.aka{font-size:13px;color:var(--muted);margin:2px 0 0}
+.teaser{margin:2px 0 6px;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card[open] .teaser{display:none}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:12px;padding:2px 8px;border-radius:6px;background:var(--bg);color:var(--fg);border:1px solid var(--line)}
+.tag.m{color:var(--muted)}
+.tag.arm{background:var(--arm-s);color:var(--arm);border-color:var(--arm-s);font-weight:700}
+.badge{font-size:11px;font-weight:700;letter-spacing:.05em;padding:2px 7px;border-radius:6px}
+.b-neu{background:var(--fg);color:var(--bg)}
+.b-do{color:var(--fg);border:1.5px solid var(--fg)}
+.b-mi{color:var(--fg);border:1.5px dashed var(--fg)}
+.b-idee{background:var(--accent-soft);color:var(--accent);border:1.5px dashed var(--accent)}
+.b-ueb{background:var(--ks);color:var(--kc);border:1.5px solid var(--kc)}
+.kpill{font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--ks);color:var(--kc);margin-left:auto}
+.det{display:grid;gap:14px;border-top:1px solid var(--line);padding:12px 0 14px;margin:0 14px}
+.sec h4,.box h4{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--kc);margin:0 0 3px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.sec p,.box p{margin:0 0 4px;max-width:65ch}
+.sec ul,.box ul{margin:0;padding-left:20px;max-width:65ch}
+.vs{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:none;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:0 5px}
+.lv{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;max-width:65ch}
+.lv b{font-size:13px;color:var(--muted);padding-top:1px}
+.box{border-radius:10px;padding:10px 12px}
+.box.arm{background:var(--arm-s)}
+.box.arm h4{color:var(--arm)}
+.box.safe{background:var(--warn-s)}
+.box.safe h4{color:var(--warn)}
+.box.pass{background:var(--bg);border:1px solid var(--line)}
+.pl{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:start}
+.medal{font-size:12px;font-weight:700;border-radius:999px;padding:1px 9px;border:1.5px solid currentColor;white-space:nowrap}
+.m-b{color:#A0612B}.m-s{color:var(--muted)}.m-g{color:var(--warn)}
+.mob{display:inline-flex;align-items:center;gap:2px;font-size:12px;color:var(--muted);padding:2px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+.mob i{width:7px;height:10px;border-radius:2px;background:var(--line);display:inline-block}
+.mob i.on{background:var(--accent)}
+.mob span{margin-left:4px}
+.mobl{margin:0;padding-left:0;list-style:none;font-size:13px;color:var(--muted);display:grid;gap:2px}
+.note{font-size:14px;color:var(--muted);font-style:italic;margin:0}
+.tafel{display:grid;gap:6px}
+.tafel svg{width:100%;max-width:560px;height:auto;display:block}
+.tafel .tt{font-size:13px;font-weight:700;color:var(--muted)}
+.leg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted)}
+.leg span{display:inline-flex;gap:4px;align-items:center}
+.leg svg{width:18px;height:12px}
+.tv-board{fill:var(--surface);stroke:var(--line);stroke-width:2}
+.tv-mid{stroke:var(--line);stroke-width:1.5;stroke-dasharray:6 6}
+.tv-k1{fill:var(--team1)}.tv-k2{fill:var(--team2)}.tv-k3{fill:var(--catch)}
+.tv-kl{fill:var(--surface);font:700 11px var(--f-body)}
+.tv-h{fill:var(--cone)}
+.tv-ball{fill:var(--catch);stroke:var(--surface);stroke-width:1.5}
+.tv-mat{fill:var(--mat);stroke:var(--line)}
+.tv-zone{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:5 4}
+.tv-line{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:6 5}
+.tv-rope{stroke:var(--rope);stroke-width:3;stroke-linecap:round}
+.tv-p{fill:none;stroke:var(--path);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.tv-w{fill:none;stroke:var(--catch);stroke-width:2;stroke-dasharray:5 4}
+.tv-q{fill:var(--accent-soft);stroke:var(--muted)}
+.tv-t{fill:var(--fg);font:11px var(--f-body)}
+.tv-tm{fill:var(--muted);font:10px var(--f-body)}
+.rowb{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.meta{font-size:13px;color:var(--muted);margin:0}
+.notes{display:grid;gap:6px}
+.nt{background:var(--bg);border-radius:8px;padding:8px 10px;font-size:15px}
+.nt .who{font-size:12px;color:var(--muted)}
+.nin{display:flex;gap:6px;flex-wrap:wrap}
+.nin input{flex:1 1 200px;min-width:0;font:inherit;color:var(--fg);background:var(--bg);border:1.5px solid var(--line);border-radius:8px;padding:8px 10px}
+.msg{font-size:14px;margin:0;color:var(--muted)}
+.msg.err{color:var(--c1)}
+.empty{padding:28px 0;text-align:center;color:var(--muted)}
+.pick{outline:3px solid var(--accent);outline-offset:2px}
+.panel{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:12px}
+.form{background:var(--surface);border:1.5px solid var(--accent);border-radius:12px;padding:14px;margin:0 0 16px;display:grid;gap:14px}
+.form label,.fl{display:grid;gap:4px;font-size:14px;font-weight:700}
+.form input,.form select,.form textarea,.panel select{font:inherit;font-weight:400;color:var(--fg);background:var(--bg);border:1.5px solid var(--line);border-radius:8px;padding:9px 11px;width:100%;min-width:0}
+.form textarea{min-height:80px;resize:vertical}
+.hint{font-size:13px;font-weight:400;color:var(--muted)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.sedit{border:1px solid var(--line);border-radius:10px;padding:10px;display:grid;gap:6px}
+.tools{display:flex;flex-wrap:wrap;gap:4px}
+.ted svg{width:100%;max-width:560px;height:auto;display:block;cursor:crosshair;touch-action:manipulation}
+.chk{display:flex;flex-wrap:wrap;gap:6px;max-height:180px;overflow:auto;padding:4px}
+.heute{display:grid;gap:8px}
+.hi{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;background:var(--surface);border:2px solid var(--kc);border-radius:10px;padding:8px 10px}
+.hi .nr{font-family:var(--f-display);font-weight:700;color:var(--kc);font-variant-numeric:tabular-nums}
+.hi .t{min-width:0}
+.hi .t b{display:block}
+.hi .t span{font-size:13px;color:var(--muted)}
+.sum{display:flex;flex-wrap:wrap;gap:8px 18px;font-weight:700}
+.pack{columns:2 180px;margin:0;padding-left:20px}
+.pack li{break-inside:avoid}
+.pass3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.pass3>div{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:12px}
+.pass3 h3{font-family:var(--f-display);font-size:18px;margin:0 0 6px}
+.pass3 ol{margin:0;padding-left:20px;display:grid;gap:4px}
+.gstep{display:grid;gap:6px}
+.gstep .chips+.chips{margin-top:4px}
+.einb .out{margin-top:6px}
+.out{background:var(--bg);border-radius:10px;padding:12px;display:grid;gap:8px}
+.sbr{background:var(--surface);border:2px solid var(--kc);border-radius:10px;padding:8px 10px;display:grid;gap:4px}
+.sbh{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.sbp{font-size:13px;font-weight:700;color:var(--kc);min-width:150px;font-variant-numeric:tabular-nums}
+.sbn{font:inherit;font-weight:700;color:var(--fg);background:none;border:0;padding:0;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.sbs{display:grid;gap:6px}
+.sbs .hi{grid-template-columns:1fr auto}
+.sh{font-size:13px;font-weight:700;color:var(--muted);margin:14px 0 6px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.tile{font:inherit;text-align:left;border:0;border-radius:16px;padding:12px;background:var(--ks);color:var(--fg);cursor:pointer;display:grid;gap:2px}
+.tile b{font-family:var(--f-display);font-size:16px}
+.tile span{font-size:13px;color:var(--muted)}
+.tile .ic{width:24px;height:24px}
+.wk3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.wk{font:inherit;color:var(--fg);text-align:left;background:var(--ks);border:0;border-radius:12px;padding:12px;cursor:pointer;display:grid;gap:6px}
+.wk b{font-family:var(--f-display);font-size:20px}
+.wk svg{width:100%;height:auto;display:block}
+.subnav{margin:0 0 12px}
+.nav button{display:inline-flex;gap:6px;align-items:center;--kc:currentColor}
+.nav button .ic{width:18px;height:18px}
+.card h3>.ic+span{flex:1 1 0;min-width:6ch}
+.favb{align-self:flex-start;margin:-4px -6px 0 -8px;flex:none;width:40px;height:40px;border-radius:50%;border:0;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;color:var(--muted)}
+.favb svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round}
+.favb[aria-pressed="true"]{color:var(--cone)}
+.favb[aria-pressed="true"] svg{fill:currentColor}
+.mk.up{color:var(--ok);border-color:var(--ok);font-weight:700}
+.mk.up .ic{stroke:var(--ok)}
+.mk.dn{font-weight:700}
+.mk.gp{color:var(--fg)}
+.btn3 .ic{width:16px;height:16px;vertical-align:-3px;--kc:currentColor}
+.btn3[data-gesp][aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:var(--bg)}
+#fontbtn{float:right;margin:4px 6px 0 0;font-weight:700}
+#fontbtn b{font-size:17px;line-height:1}
+:root[data-fs="gross"] .wrap>section{zoom:1.18}
+.card .tafel svg{cursor:zoom-in}
+.zoomov{position:fixed;inset:0;z-index:60;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:12px;overflow:hidden;cursor:zoom-out}
+.zoomov svg{width:min(96vw,150vh);height:auto;flex:none}
+.zoomov span{font-size:14px;color:var(--muted)}
+@media (orientation:portrait){.zoomov svg{width:min(86vh,150vw);transform:rotate(90deg)}.zoomov span{position:absolute;bottom:10px}}
+@media (max-width:640px){
+  body{padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+  .wrap>.nav{position:fixed;left:0;right:0;bottom:0;z-index:40;margin:0;flex-wrap:nowrap;gap:4px;background:var(--surface);border-top:1.5px solid var(--line);padding:6px max(6px,env(safe-area-inset-left,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-right,0px))}
+  .wrap>.nav button{flex:1 1 0;min-width:0;flex-direction:column;gap:2px;justify-content:center;border:0;background:none;border-radius:12px;padding:6px 2px;font-size:12px;line-height:1.2}
+  .wrap>.nav button .ic{width:22px;height:22px}
+  .wrap>.nav button[aria-current="page"]{background:var(--accent);color:var(--accent-fg)}
+  .wrap>.nav button::after{display:none!important}
+  .wrap>.nav .cnt{min-width:16px;padding:0 4px;font-size:11px}
+}
+@media (max-width:480px){.kpill{margin-left:0}.hi{grid-template-columns:auto 1fr}.hi .rowb{grid-column:1/-1}}
+@media (prefers-reduced-motion:reduce){.card h3::after,.fg>summary::before{transition:none}}
+</style>
+<div class="wrap">
+  <button type="button" class="btn3" id="helpbtn" aria-pressed="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>Hilfe</button><button type="button" class="btn3" id="themebtn" data-tip="Hell oder dunkel umschalten"></button><button type="button" class="btn3" id="fontbtn" aria-pressed="false" aria-label="Große Schrift">A <b>A</b></button><h1>Rolli-Kids-Lexikon</h1>
+  <p class="sub" id="sub">Spiele und einzelne Übungen für Fahrtechnik, Kraft und Ausdauer. Jede Karte zeigt eine Taktiktafel und eine Anpassung für Kinder mit wenig Arm- und Handfunktion.</p>
+  <nav class="nav" aria-label="Ansichten">
+    <button type="button" data-v="start"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg><span>Start</span></button>
+    <button type="button" data-v="lex"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM5 17a3 3 0 0 1 3-3h11"/></svg><span>Lexikon</span></button>
+    <button type="button" data-v="bauen"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/><path d="M16.5 4v7M13 7.5h7M4 16.5h7"/></svg><span>Bauen</span></button>
+    
+    <button type="button" data-v="heute"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="16" rx="2"/><path d="M9 5V3h6v2M9 11h6M9 15h6"/></svg><span>Für heute<span class="cnt" id="hcnt">0</span></span></button>
+  </nav>
+
+  <section id="v-start" hidden><div id="s-out"></div></section>
+
+  <section id="v-lex" hidden>
+    <div class="helpbox"><b>ⓘ So liest du eine Karte</b><span>Bild links: die Taktiktafel in klein. Tippe auf die Karte für alle Details.</span><span>Balken mit Stufe 1 bis 5: für welche Mobilität der Eintrag passt (1 sehr wenig, 5 sehr hoch).</span><span>„Arm/Hand angepasst“: Es gibt eine Anpassung für Kinder mit wenig Arm- und Handfunktion.</span><span>Gestrichelter Rand: einzelne Übung statt Spiel.</span><span>Runde Symbole: zeigen nur eine Kategorie. Nochmal tippen zeigt wieder alle.</span><span>Stern: dein Favorit. Kalender: wann du es zuletzt gespielt hast. Beides siehst nur du.</span><span>Daumen: Erfahrungen aller Trainerinnen.</span><span>Taktiktafel antippen: großes Bild.</span></div><div class="search">
+      <input id="q" type="search" placeholder="Suchen, z. B. Drehen, Staffel oder Luftballon" aria-label="Suche">
+      <button class="btn2" id="rnd" type="button">Zufall</button>
+      <button class="btn" id="newbtn" type="button">+ Neuer Eintrag</button>
+    </div>
+    <div id="editor"></div>
+    <div class="chips" id="quick" style="margin:0 0 10px"></div>
+    <div class="filters" id="filters" hidden></div>
+    <div class="bar"><span id="count"></span><span class="acts"><button class="link" id="all" type="button">Alle aufklappen</button><button class="link" id="reset" type="button">Filter zurücksetzen</button></span></div>
+    <div class="jump" id="jump"></div><div id="list"></div>
+  </section>
+
+  <section id="v-bauen" hidden>
+    <div class="nav subnav"><button type="button" data-v="bauen">Spiel bauen</button><button type="button" data-v="stunde">Stunde bauen</button></div>
+    <h2>Spiel bauen</h2>
+    <p class="sub">Wähle Gruppe, Material, Stufe und Spielform. Dann suchst du 1 bis 3 Übungen aus. Daraus entsteht ein Spielvorschlag. Ausformuliert wird er später beim Ideen-Durchgehen. Gefällt er dir, speicherst du ihn als Idee.</p>
+    <div class="panel"><div id="b-in" style="display:grid;gap:14px"></div><div id="b-out" style="display:grid;gap:10px"></div></div>
+  </section>
+
+  <section id="v-stunde" hidden>
+    <div class="nav subnav"><button type="button" data-v="bauen">Spiel bauen</button><button type="button" data-v="stunde">Stunde bauen</button></div>
+    <h2>Stunde bauen</h2>
+    <p class="sub">Stell Dauer, Gruppe, Schwerpunkt und Material ein. Die Seite schlägt eine Stunde aus dem Lexikon vor, mit zwei Alternativen pro Teil. Tippe eine Alternative an, um sie einzutauschen. Dann übernimmst du die Stunde in „Für heute“.</p>
+    <div class="panel"><div id="sb-in" style="display:grid;gap:14px"></div><div id="sb-out" style="display:grid;gap:10px"></div></div>
+  </section>
+
+  <section id="v-heute" hidden>
+    <h2>Für heute</h2>
+    <p class="sub">Deine Auswahl für das nächste Training. Tippe bei einer Karte auf „Für heute“. Die Seite rechnet die Dauer zusammen und schreibt die Packliste. Die Liste siehst nur du.</p>
+    <div id="h-out"></div>
+  </section>
+
+  <section id="v-pass" hidden>
+    <h2>Fahr-Pass</h2>
+    <p class="sub">Abzeichen in drei Stufen. Die Aufgaben stehen bei den Fahrtechnik-Übungen. Speichere den Pass als Datei, drucke ihn aus und stemple in der Halle ab. Namen der Kinder stehen nur auf Papier, nicht auf der Seite.</p>
+    <div id="p-out"></div>
+  </section>
+  <div class="rowb" id="appx" hidden style="margin-top:28px;border-top:1px solid var(--line);padding-top:12px"><button type="button" class="btn3" id="appdata">App-Daten speichern</button><span class="msg" id="appmsg" role="status">Für die Offline-App: speichert den aktuellen Stand als „daten.json“.</span></div>
+</div>
+<script>
+(function(){var K="rk-theme",R=document.documentElement,B=document.getElementById("themebtn"),M=window.matchMedia?window.matchMedia("(prefers-color-scheme: dark)"):null,t=null;
+try{t=localStorage.getItem(K)}catch(e){}
+if(t==="dark"||t==="light")R.setAttribute("data-theme",t);
+function cur(){return R.getAttribute("data-theme")||(M&&M.matches?"dark":"light")}
+function draw(){var d=cur()==="dark";B.innerHTML='<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">'+(d?'<path d="M20 14A8 8 0 1 1 10 4a6 6 0 0 0 10 10z"/>':'<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/>')+'</svg>';B.setAttribute("aria-label",d?"Dunkler Modus ist an. Tippen für hell.":"Heller Modus ist an. Tippen für dunkel.")}
+B.addEventListener("click",function(){var n=cur()==="dark"?"light":"dark";R.setAttribute("data-theme",n);try{localStorage.setItem(K,n)}catch(e){}draw()});
+if(M&&M.addEventListener)M.addEventListener("change",draw);
+draw()})();
+</script>
+<script>
+var DEF={
+ cats:{"1":"Aufwärmen und Fangspiele","2":"Fahrübungen und Fahr-Spiele","3":"Geschicklichkeit","4":"Schnelligkeit und Reaktion","5":"Staffeln","6":"Kraft und Ausdauer","7":"Ballspiele und Wettkampf","8":"Ruhe und Abschluss","9":"Spiel und Spaß","10":"Alltag und Barrieren","11":"Sportarten kennenlernen","12":"Übung: Fahrtechnik","13":"Übung: Kraft","14":"Übung: Ausdauer","15":"Übung: Ball","16":"Übung: Wahrnehmung und Miteinander"},
+ ziele:["Reaktion","Kontrolle","Tempo","Kraft","Ausdauer","Geschick","Teamgeist","Ruhe","Konzentration","Wahrnehmung","Gleichgewicht","Beweglichkeit","Alltag"],
+ formen:["Fänger","Staffel","Kreis","Paare","Parcours","Ballspiel","Musik","Freies Fahren","Wettkampf","Zirkel","Anschleichen","Sammeln/Würfeln","Stationen","Einzelübung"],
+ mats:["Hütchen","Malstäbe/Stangen","Softbälle","Gymnastikball","Basketball/Volleyball","Luftballon","Medizinball","Reifen/Ringe","Matten","Seile/Bänder","Tücher","Leibchen","Karten","Würfel","Beanbags","Schwimmnudeln","Kasten/Bank","Rampe/Keil","Musik","Theraband","Korb/Eimer","Rinne für Bälle","Klebeband","Pfeife","Sonstiges"],
+ mobs:[{n:"Sehr wenig Mobilität",d:"Spezialsteuerung oder wird geschoben, kaum Arm- und Rumpffunktion"},{n:"Wenig Mobilität",d:"E-Rolli selbstständig oder Aktivrolli kurze Strecken, schwache Hände"},{n:"Mittlere Mobilität",d:"Aktivrolli selbstständig in der Halle, eher langsam"},{n:"Hohe Mobilität",d:"Aktivrolli sicher und zügig, Kurven und rückwärts"},{n:"Sehr hohe Mobilität",d:"sportlich, hohes Tempo, Ankippen, Ball im Fahren"}],
+ rahmen:[
+  {id:"staffel",tf:[{t:"Aufbau",o:[["l",12,2,12,58,"Start"],["k",6,18,"A",1],["k",6,42,"B",2],["h",70,18,"Übung"],["h",70,42,"Übung"],["p",[12,16,66,16]],["p",[66,20,14,20]],["p",[12,40,66,40]],["p",[66,44,14,44]]]}],n:"Staffel",k:5,form:"Staffel",mat:["Hütchen"],text:"Zwei Teams stehen an der Startlinie. Jedes Kind fährt zum Hütchen, macht dort {b} und fährt zurück. Dann klatscht es das nächste Kind ab, oder es tippt mit der Schwimmnudel an.",arm:"Abklatschen ersetzen: Das nächste Kind darf starten, sobald das ankommende Kind über die Linie fährt."},
+  {id:"fangen",tf:[{t:"Aufbau",o:[["k",50,30,"F",3],["k",20,14],["k",78,16],["k",26,46],["k",74,46],["p",[46,32,32,42]],["z",84,2,14,14,"Übung"]],mid:false}],n:"Fangspiel",k:1,form:"Fänger",mat:["Leibchen"],text:"Ein oder zwei Fänger mit Leibchen. Wer gefangen wird, macht {b}. Danach ist das Kind wieder frei und fährt weiter.",arm:"Fangen durch Antippen mit einer Schwimmnudel am Rolli, oder der Fänger fängt, indem er in einen Kreis um das Kind fährt."},
+  {id:"stationen",tf:[{t:"Aufbau",o:[["z",4,4,24,20,"Station 1"],["z",72,4,24,20,"Station 2"],["z",72,36,24,20,"Station 3"],["z",4,36,24,20,"Station 4"],["p",[30,14,70,14]],["p",[84,26,84,34]],["p",[70,46,30,46]],["p",[16,34,16,26]]],mid:false}],n:"Stationen",k:6,form:"Stationen",mat:["Hütchen"],text:"{b} wird eine Station im Zirkel. Pro Station 60 bis 120 Sekunden üben, 30 bis 60 Sekunden Pause zum Wechseln. Jede Station bekommt eine Karte mit Bild.",arm:"An jeder Station gibt es eine leichte Stufe, die ohne Greifen geht."},
+  {id:"wuerfeln",tf:[{t:"Aufbau",o:[["q",10,30,"Würfel"],["k",18,30,"A",1],["h",32,30,"1"],["h",44,30,"2"],["h",56,30,"3"],["h",68,30,"4"],["h",80,30,"5"],["h",92,30,"6"],["p",[24,26,66,26]],["p",[66,34,24,34]]]}],n:"Würfelspiel",k:9,form:"Sammeln/Würfeln",mat:["Würfel","Hütchen"],text:"Ein großer Würfel liegt in der Mitte. Die Augenzahl sagt, wie oft {b} gemacht wird. Oder sie sagt, zu welchem Hütchen (1 bis 6) man fahren muss.",arm:"Großer Schaumstoffwürfel, der vom Schoß oder aus einer Rinne gerollt wird. Oder ein Partner würfelt, und das Kind sagt die Zahl an."},
+  {id:"punkte",tf:[{t:"Aufbau",o:[["q",8,16,"Korb A"],["q",8,44,"Korb B"],["k",18,16,"A",1],["k",18,44,"B",2],["z",60,16,30,28,"Übung"],["p",[24,16,58,22]],["p",[24,44,58,38]]]}],n:"Punkte sammeln",k:5,form:"Wettkampf",mat:["Korb/Eimer","Beanbags"],text:"Jedes Mal, wenn {b} gelingt, holt das Kind einen Punkt, zum Beispiel ein Beanbag für den Teamkorb. Welches Team hat nach drei Minuten mehr?",arm:"Der Punkt wird nicht getragen, sondern angesagt und von einem Zähler-Kind gezählt."},
+  {id:"musik",tf:[{t:"Aufbau",o:[["q",92,6,"Musik"],["k",20,18],["k",46,40],["k",70,20],["k",30,48],["p",[24,18,40,12]],["p",[50,38,62,30]],["t",50,56,"bei Stopp: Übung"]],mid:false}],n:"Musik-Stopp",k:4,form:"Musik",mat:["Musik"],text:"Alle fahren frei zur Musik. Wenn die Musik stoppt, machen alle sofort {b}. Wer zuerst fertig ist, darf die nächste Runde die Musik stoppen.",arm:"Statt Musik-Taste drücken: Das Kind sagt laut „Stopp“."},
+  {id:"rekord",tf:[{t:"Aufbau",o:[["k",30,20],["k",50,36],["k",70,20],["z",20,10,60,40,"Übungsfeld"],["q",90,52,"Zählbrett"],["t",50,56,"alle Punkte zählen zusammen"]],mid:false}],n:"Gruppen-Rekord",k:6,form:"Freies Fahren",mat:[],text:"Die ganze Gruppe zählt gemeinsam: Wie oft schaffen wir {b} in zwei Minuten? Die Zahl wird aufgeschrieben. Beim nächsten Training versucht die Gruppe, den Rekord zu brechen.",arm:"Jedes Kind zählt mit seiner eigenen Stufe. Alle Punkte zählen gleich viel."},
+  {id:"parcours",tf:[{t:"Aufbau",o:[["k",5,30],["h",20,30],["m",32,22,10,16,"Matte"],["z",50,20,14,20,"Übung"],["h",74,24],["h",74,36],["p",[10,30,94,30]]]}],n:"Parcours",k:3,form:"Parcours",mat:["Hütchen","Matten"],text:"Ein Parcours mit vier bis sechs Stationen. Eine Station ist {b}. Die Kinder fahren nacheinander los, mit etwas Abstand.",arm:"Für jede Station gibt es eine Umfahrung oder eine leichte Spur."}
+ ]
+};
+var CFG=JSON.parse(JSON.stringify(DEF));
+var DL={kurz:"bis 5 Min.",mittel:"5 bis 15 Min.",lang:"über 15 Min."}, MIN={kurz:5,mittel:10,lang:20};
+var BASIS=["Klebeband","Pfeife"];
+var OLDM={"Hütchen":["Hütchen"],"Bälle":["Softbälle"],"Matten":["Matten"],"Seile":["Seile/Bänder"],"Karten/Tücher":["Karten","Tücher"],"Sonstiges":["Sonstiges"],"ohne Material":[]};
+var G=[],RAW={},NOTES={},DB=null,U=null,ME=null,CANW=null,DLS=null,STATE="laden";
+var view="lex",sel={typ:[],mob:[],k:[],z:[],f:[],mat:[],d:[],e:[]},matMode="eins",mobMode="alle",pick=null,openAll=false,EIN=[],editing=null,openIds={};
+var svgN=0,showF=false;
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function slug(n){return n.toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60)||"eintrag"}
+function today(){return new Date().toISOString().slice(0,10)}
+function dmy(s){return s?String(s).split("-").reverse().join("."):""}
+function catName(k){return CFG.cats[String(k)]||("Kategorie "+k)}
+function fam(k){var n=+k;return n>=12&&n<=16?"u":n===8?"r":(n===10||n===11)?"a":"s"}
+var FAMC={s:2,u:6,r:4,a:8},FAMI={s:'<circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4z"/>',u:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>',r:'<path d="M20 14A8 8 0 1 1 10 4a6 6 0 0 0 10 10z"/>',a:'<path d="M4 20h4v-4h4v-4h4V8h4"/>'};
+function cvar(k){var n=+k;return n>=1&&n<=16?n:11}
+function kstf(k){var c=FAMC[fam(k)];return '--kc:var(--c'+c+');--ks:var(--s'+c+')'}
+var CATK={1:"warm",2:"stat",3:"gesch",4:"power",5:'<path d="M4 8h14l-3-3M20 16H6l3 3"/>',6:"team",7:"ball",8:"wild",9:"spass",10:"alltag",11:"wett",12:"fahr",13:"kraft",14:"lang",15:"sport",16:"reak"};
+function famIcon(k){var c=CATK[+k],p=(c&&(c.charAt(0)==="<"?c:(TIC&&TIC[c])))||FAMI[fam(k)];return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">'+p+'</svg>'}
+function kst(k){return '--kc:var(--c'+cvar(k)+');--ks:var(--s'+cvar(k)+')'}
+function matsOf(g){if(Array.isArray(g.mat))return g.mat;var r=[];(g.m||[]).forEach(function(x){(OLDM[x]||[x]).forEach(function(y){if(r.indexOf(y)<0)r.push(y)})});return r}
+function isUeb(g){return g.typ==="uebung"}
+function mobOf(g){if(Array.isArray(g.mob))return g.mob.map(Number);var r=[];if(g.do)r.push(2,3);if(g.fit)r.push(3,4,5);if(!r.length)r=[3,4,5];return r.filter(function(v,i,a){return a.indexOf(v)===i}).sort()}
+function mobName(v){var m=CFG.mobs[+v-1];return m?m.n:("Stufe "+v)}
+function mobRange(a){if(!a.length)return "keine Stufe";a=a.slice().sort();var lo=a[0],hi=a[a.length-1];var gap=hi-lo+1!==a.length;return gap?"Stufe "+a.join(", "):(lo===hi?"Stufe "+lo:"Stufe "+lo+"–"+hi)}
+function mobMeter(a){var h='<span class="mob" title="Mobilität '+mobRange(a)+'">';for(var i=1;i<=5;i++)h+='<i class="'+(a.indexOf(i)>-1?"on":"")+'"></i>';return h+'<span>'+mobRange(a)+'</span></span>'}
+function byId(id){for(var i=0;i<G.length;i++)if(G[i].id===id)return G[i];return null}
+function prep(g){
+  g.a=g.a||[];g.sec=g.sec||[];g.z=g.z||[];g.f=g.f||[];g.note=g.note||"";g.d=g.d||"mittel";g.arm=g.arm||[];g.bau=g.bau||[];g.tf=g.tf||[];
+  g.mats=matsOf(g);g.mobs=mobOf(g);
+  g.hay=(g.n+" "+g.a.join(" ")+" "+g.note+" "+g.sec.map(function(s){return s.h+" "+(s.p||[]).join(" ")}).join(" ")+" "+g.arm.join(" ")+" "+(g.sicher||"")+" "+g.z.concat(g.f,g.mats).join(" ")+" "+DL[g.d]+" "+catName(g.k)).toLowerCase();
+  var first=g.sec.length?((g.sec[0].p||[])[0]||""):"";
+  var m=first.match(/^.{20,}?[.?!](?=\s|$)/);
+  g.t=(m&&m[0].length<170)?m[0]:(first.length>160?first.slice(0,157).replace(/\s\S*$/,"")+" …":first);
+}
+/* ---------- Taktiktafel ---------- */
+var TT={k:"Kind",k2:"Kind Team 2",k3:"Fänger",h:"Hütchen",b:"Ball",m:"Matte",r:"Reifen / Zone",z:"Zone",l:"Linie",s:"Seil",p:"Fahrweg",w:"Ball / Wurf",q:"Gegenstand",t:"Text"};
+function X(v){return 5+v*4}function Y(v){return 5+v*4}
+function tafelSVG(o,mid,edit){
+  var id="ar"+(++svgN),h='<svg viewBox="0 0 410 250" role="img" aria-label="Taktiktafel"><defs><marker id="'+id+'" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1 1L9 5L1 9z" style="fill:var(--path)"/></marker><marker id="'+id+'w" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1 1L9 5L1 9z" style="fill:var(--catch)"/></marker></defs>';
+  h+='<rect class="tv-board" x="5" y="5" width="400" height="240" rx="8"/>';
+  if(mid!==false)h+='<line class="tv-mid" x1="205" y1="5" x2="205" y2="245"/>';
+  var lay={m:0,z:0,r:0,l:1,s:1,p:2,w:2,q:3,h:3,b:4,k:5,t:6},arr=(o||[]).map(function(e,i){return{e:e,i:i}});
+  arr.sort(function(a,b){return(lay[a.e[0]]||0)-(lay[b.e[0]]||0)});
+  arr.forEach(function(it){var e=it.e,t=e[0],ix=' data-ix="'+it.i+'"';
+    if(t==="m")h+='<rect class="tv-mat"'+ix+' x="'+X(e[1])+'" y="'+Y(e[2])+'" width="'+e[3]*4+'" height="'+e[4]*4+'" rx="3"/>'+(e[5]?'<text class="tv-tm" x="'+(X(e[1])+e[3]*2)+'" y="'+(Y(e[2])+e[4]*2+4)+'" text-anchor="middle">'+esc(e[5])+'</text>':'');
+    else if(t==="z")h+='<rect class="tv-zone"'+ix+' x="'+X(e[1])+'" y="'+Y(e[2])+'" width="'+e[3]*4+'" height="'+e[4]*4+'" rx="6"/>'+(e[5]?'<text class="tv-tm" x="'+(X(e[1])+6)+'" y="'+(Y(e[2])+14)+'">'+esc(e[5])+'</text>':'');
+    else if(t==="r")h+='<circle class="tv-zone"'+ix+' cx="'+X(e[1])+'" cy="'+Y(e[2])+'" r="'+e[3]*4+'"/>'+(e[4]?'<text class="tv-tm" x="'+X(e[1])+'" y="'+(Y(e[2])+4)+'" text-anchor="middle">'+esc(e[4])+'</text>':'');
+    else if(t==="l")h+='<line class="tv-line"'+ix+' x1="'+X(e[1])+'" y1="'+Y(e[2])+'" x2="'+X(e[3])+'" y2="'+Y(e[4])+'"/>'+(e[5]?'<text class="tv-tm" x="'+(X(e[1])+4)+'" y="'+(Y(e[2])+13)+'">'+esc(e[5])+'</text>':'');
+    else if(t==="s")h+='<line class="tv-rope"'+ix+' x1="'+X(e[1])+'" y1="'+Y(e[2])+'" x2="'+X(e[3])+'" y2="'+Y(e[4])+'"/>';
+    else if(t==="p"){var pts=e[1]||[],d="";for(var i=0;i+1<pts.length;i+=2)d+=(i?" L":"M")+X(pts[i])+" "+Y(pts[i+1]);if(d)h+='<path class="tv-p"'+ix+' d="'+d+'" marker-end="url(#'+id+')"/>'}
+    else if(t==="w")h+='<line class="tv-w"'+ix+' x1="'+X(e[1])+'" y1="'+Y(e[2])+'" x2="'+X(e[3])+'" y2="'+Y(e[4])+'" marker-end="url(#'+id+'w)"/>';
+    else if(t==="q")h+='<rect class="tv-q"'+ix+' x="'+(X(e[1])-9)+'" y="'+(Y(e[2])-9)+'" width="18" height="18" rx="3"/>'+(e[3]?'<text class="tv-tm" x="'+X(e[1])+'" y="'+(Y(e[2])+22)+'" text-anchor="middle">'+esc(e[3])+'</text>':'');
+    else if(t==="h")h+='<polygon class="tv-h"'+ix+' points="'+X(e[1])+','+(Y(e[2])-9)+' '+(X(e[1])-8)+','+(Y(e[2])+7)+' '+(X(e[1])+8)+','+(Y(e[2])+7)+'"/>'+(e[3]?'<text class="tv-tm" x="'+X(e[1])+'" y="'+(Y(e[2])+19)+'" text-anchor="middle">'+esc(e[3])+'</text>':'');
+    else if(t==="b")h+='<circle class="tv-ball"'+ix+' cx="'+X(e[1])+'" cy="'+Y(e[2])+'" r="5"/>';
+    else if(t==="k"){var tm=e[4]||1;h+='<circle class="tv-k'+tm+'"'+ix+' cx="'+X(e[1])+'" cy="'+Y(e[2])+'" r="10"/>'+(e[3]?'<text class="tv-kl" x="'+X(e[1])+'" y="'+(Y(e[2])+4)+'" text-anchor="middle">'+esc(String(e[3]).slice(0,2))+'</text>':'')}
+    else if(t==="t")h+='<text class="tv-t"'+ix+' x="'+X(e[1])+'" y="'+Y(e[2])+'" text-anchor="middle">'+esc(e[3])+'</text>';
+  });
+  return h+'</svg>';
+}
+var LEGI={k:'<circle class="tv-k1" cx="9" cy="6" r="5"/>',k2:'<circle class="tv-k2" cx="9" cy="6" r="5"/>',k3:'<circle class="tv-k3" cx="9" cy="6" r="5"/>',h:'<polygon class="tv-h" points="9,1 4,11 14,11"/>',b:'<circle class="tv-ball" cx="9" cy="6" r="4"/>',m:'<rect class="tv-mat" x="2" y="2" width="14" height="8"/>',r:'<circle class="tv-zone" cx="9" cy="6" r="5"/>',z:'<rect class="tv-zone" x="2" y="2" width="14" height="8"/>',l:'<line class="tv-line" x1="1" y1="6" x2="17" y2="6"/>',s:'<line class="tv-rope" x1="2" y1="6" x2="16" y2="6"/>',p:'<line class="tv-p" x1="1" y1="6" x2="17" y2="6"/>',w:'<line class="tv-w" x1="1" y1="6" x2="17" y2="6"/>',q:'<rect class="tv-q" x="4" y="1" width="10" height="10"/>'};
+function legend(o){var seen={},h='<div class="leg">';(o||[]).forEach(function(e){var t=e[0];if(t==="k")t=(e[4]===2?"k2":e[4]===3?"k3":"k");if(t==="t"||seen[t])return;seen[t]=1;h+='<span><svg viewBox="0 0 18 12" aria-hidden="true">'+LEGI[t]+'</svg>'+TT[t]+'</span>'});return h+'</div>'}
+function tafelBlock(tf){return tf.map(function(b){return '<div class="tafel">'+(b.t?'<div class="tt">'+esc(b.t)+'</div>':'')+tafelSVG(b.o,b.mid)+legend(b.o)+'</div>'}).join("")}
+/* ---------- Filter ---------- */
+function groups(){return[
+ {key:"typ",label:"Art",opts:["spiel","uebung"],name:function(o){return o==="spiel"?"Spiele":"Übungen"}},
+ {key:"mob",label:"Mobilität der Gruppe",opts:["1","2","3","4","5"],name:function(o){return o+" "+mobName(o)}},
+ {key:"k",label:"Kategorie",opts:Object.keys(CFG.cats).sort(function(a,b){return a-b}),name:catName,kc:true},
+ {key:"mat",label:"Material",opts:["ohne Material"].concat(CFG.mats)},
+ {key:"z",label:"Ziel",opts:CFG.ziele},
+ {key:"f",label:"Spielform",opts:CFG.formen},
+ {key:"d",label:"Dauer",opts:["kurz","mittel","lang"],name:function(o){return DL[o]}},
+ {key:"e",label:"Eignung",opts:["Arm/Hand angepasst","Lief gut","NEU","Offene Ideen"]}
+]}
+function has(g,key,o){
+  if(key==="typ")return o==="uebung"?isUeb(g):!isUeb(g);
+  if(key==="e"&&o==="Favoriten")return isFav(g.id);
+  if(key==="e"&&o==="Lange nicht gespielt")return g.status!=="idee"&&daysSince(g.id)>28;
+  if(key==="d")return g.d===o;
+  if(key==="k")return String(g.k)===o;
+  if(key==="e")return o==="Lief gut"?(NOTES[g.id]||[]).some(function(n){return /^Lief gut/.test(n.text||"")}):o==="Offene Ideen"?g.status==="idee":o==="Arm/Hand angepasst"?g.arm.length>0:o==="Fahr-Pass"?!!(g.pass&&(g.pass.b||g.pass.s||g.pass.g)):(!!g.neu);
+  return g[key].indexOf(o)>-1;
+}
+function matOk(g){
+  var s=sel.mat;if(!s.length)return true;
+  if(matMode==="habe"){for(var i=0;i<g.mats.length;i++)if(s.indexOf(g.mats[i])<0&&BASIS.indexOf(g.mats[i])<0)return false;return true}
+  for(var j=0;j<s.length;j++){if(s[j]==="ohne Material"){if(!g.mats.length)return true}else if(g.mats.indexOf(s[j])>-1)return true}
+  return false;
+}
+function match(g){
+  var q=$("q").value.trim().toLowerCase();
+  if(q){var parts=q.split(/\s+/);for(var i=0;i<parts.length;i++)if(g.hay.indexOf(parts[i])<0)return false}
+  var gr=groups();
+  for(var j=0;j<gr.length;j++){var k=gr[j].key,s=sel[k];if(!s.length)continue;
+    if(k==="mat"){if(!matOk(g))return false;continue}
+    if(k==="mob"){var ms=s.map(Number);if(mobMode==="alle"){for(var y=0;y<ms.length;y++)if(g.mobs.indexOf(ms[y])<0)return false}else{if(!ms.some(function(v){return g.mobs.indexOf(v)>-1}))return false}continue}
+    if(k==="e"){if(!s.every(function(o){return has(g,k,o)}))return false;continue}
+    var ok=false;for(var x=0;x<s.length;x++)if(has(g,k,s[x])){ok=true;break}
+    if(!ok)return false}
+  return true;
+}
+function buildFilters(){
+  var openNow={};document.querySelectorAll("#filters details").forEach(function(d){openNow[d.dataset.k]=d.open});
+  var h="";
+  var FVIS=["mob","k","mat","d"];
+  groups().filter(function(gr){return FVIS.indexOf(gr.key)>-1}).forEach(function(gr){
+    var n=sel[gr.key].length;
+    h+='<details class="fg" data-k="'+gr.key+'"'+(openNow[gr.key]?' open':'')+'><summary>'+gr.label+(n?' <span class="on">'+n+'</span>':'')+'</summary><div class="fb">';
+    if(gr.key==="mob")h+='<p class="hint" style="margin:0">Tippe alle Stufen an, die in deiner Gruppe sind.</p><div class="mode"><span>Zeige</span><button type="button" class="btn3" data-mo="alle" aria-pressed="'+(mobMode==="alle")+'">passt für alle gewählten</button><button type="button" class="btn3" data-mo="eine" aria-pressed="'+(mobMode==="eine")+'">passt für mind. eine</button></div><ul class="mobl">'+CFG.mobs.map(function(m,i){return '<li><b>'+(i+1)+'</b> '+esc(m.n)+': '+esc(m.d)+'</li>'}).join("")+'</ul>';
+    if(gr.key==="mat")h+='<div class="mode"><span>Zeige</span><button type="button" class="btn3" data-mm="eins" aria-pressed="'+(matMode==="eins")+'">alles mit einem davon</button><button type="button" class="btn3" data-mm="habe" aria-pressed="'+(matMode==="habe")+'">nur was ich dabei habe</button></div>';
+    h+='<div class="chips">';
+    gr.opts.forEach(function(o){h+='<button type="button" class="chip'+(gr.kc?' kc':'')+'"'+(gr.kc?' style="'+kst(o)+'"':'')+' aria-pressed="'+(sel[gr.key].indexOf(o)>-1)+'" data-g="'+gr.key+'" data-o="'+esc(o)+'">'+esc(gr.name?gr.name(o):o)+'</button>'});
+    h+='</div></div></details>';
+  });
+  $("filters").innerHTML=h;
+  var qh=[["typ","spiel","Spiele"],["typ","uebung","Übungen"],["mat","ohne Material","Ohne Material"],["d","kurz","Kurz"],["e","Favoriten","Favoriten"],["e","Lange nicht gespielt","Lange nicht gespielt"]].map(function(q){return '<button type="button" class="chip" aria-pressed="'+(sel[q[0]].indexOf(q[1])>-1)+'" data-g="'+q[0]+'" data-o="'+q[1]+'">'+q[2]+'</button>'}).join(""),nf=0;
+  for(var kk in sel)nf+=sel[kk].length;
+  qh+='<button type="button" class="chip" id="more" aria-expanded="'+showF+'">'+(showF?"Weniger Filter":"Mehr Filter")+(nf?' <span class="cnt">'+nf+'</span>':'')+'</button>';
+  $("quick").innerHTML=qh;$("filters").hidden=!showF;
+}
+/* ---------- Karten ---------- */
+function para(t){return esc(t).replace(/^([^:]{2,52}):\s/,"<b>$1:</b> ")}
+function secH(s){
+  var p=s.p||[],h='<div class="sec"><h4>'+esc(s.h)+(s.v?' <span class="vs">Vorschlag</span>':'')+'</h4>',txt=p.join(" ");
+  if(/^Anpass/.test(s.h)&&/Einfacher:/.test(txt)){
+    var e=txt.split(/Fordernder:/),r='<div class="lv">',ein=e[0].replace(/^.*?Einfacher:\s*/,"").trim(),pre=e[0].split("Einfacher:")[0].trim();
+    if(pre)r='<p>'+esc(pre)+'</p>'+r;
+    r+='<b>Einfacher</b><span>'+esc(ein)+'</span>';
+    if(e[1]){var f=e[1].split(/\s(?=Wichtig:)/);r+='<b>Fordernder</b><span>'+esc(f[0].trim())+'</span>';if(f[1])r+='<b>Wichtig</b><span>'+esc(f[1].replace("Wichtig:","").trim())+'</span>'}
+    return h+r+'</div></div>';
+  }
+  if(/^(Schwierigkeit|Stufen)/.test(s.h)&&/(Mittel|Schwer|Stufe 2):/.test(txt)){
+    var r2='<div class="lv">';
+    txt.split(/\s(?=(?:Leicht|Mittel|Schwer|Stufe \d):)/).forEach(function(x){var i=x.indexOf(":");if(i<0){r2+='<b></b><span>'+esc(x)+'</span>';return}r2+='<b>'+esc(x.slice(0,i))+'</b><span>'+esc(x.slice(i+1).trim())+'</span>'});
+    return h+r2+'</div></div>';
+  }
+  if(p.length>1){var lead=p[0],rest=p.slice(1);if(/^(1:|Variante 1:|Beanbag|Schritt 1)/.test(lead)||(/^[^:]{2,52}:\s/.test(lead)&&/^[^:]{2,52}:\s/.test(p[1]))){rest=p;lead=""}
+    if(lead)h+='<p>'+para(lead)+'</p>';h+='<ul>'+rest.map(function(x){return '<li>'+para(x)+'</li>'}).join("")+'</ul>';return h+'</div>'}
+  return h+(p[0]?'<p>'+para(p[0])+'</p>':'')+'</div>';
+}
+function paraList(arr){return arr.length>1?'<ul>'+arr.map(function(x){return '<li>'+para(x)+'</li>'}).join("")+'</ul>':'<p>'+para(arr[0]||"")+'</p>'}
+function usedIn(id){return G.filter(function(x){return x.bau.indexOf(id)>-1})}
+var MATP={cone:'<path d="M12 4l5 14H7zM5 20h14"/>',stab:'<path d="M12 3v18M8 21h8"/>',ring:'<circle cx="12" cy="12" r="8"/>',matte:'<rect x="3" y="8" width="18" height="8" rx="2"/>',seil:'<path d="M3 12c3-6 6 6 9 0s6 6 9 0"/>',tuch:'<path d="M5 5h14v14l-7-3-7 3z"/>',leib:'<path d="M8 4l-4 3v13h16V7l-4-3a4 4 0 0 1-8 0z"/>',karte:'<rect x="6" y="4" width="12" height="16" rx="2"/>',box:'<path d="M4 8l8-4 8 4v8l-8 4-8-4zM4 8l8 4 8-4M12 12v8"/>'};
+var MATI={"Hütchen":"cone","Malstäbe/Stangen":"stab","Softbälle":"ball","Gymnastikball":"ball","Basketball/Volleyball":"ball","Medizinball":"ball","Luftballon":"ballon","Reifen/Ringe":"ring","Matten":"matte","Seile/Bänder":"seil","Theraband":"seil","Tücher":"tuch","Leibchen":"leib","Karten":"karte","Würfel":"zufall","Musik":"musik"};
+function mk(p,t){return '<span class="mk"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">'+p+'</svg>'+esc(t)+'</span>'}
+function matIcon(m){var c=MATI[m];return (c&&(MATP[c]||(TIC&&TIC[c])))||MATP.box}
+function marks(g){var h=mk(TIC.kurz,DL[g.d]);if(!g.mats.length)h+=mk(TIC.ohne,"ohne Material");g.mats.forEach(function(m){h+=mk(matIcon(m),m)});return h}
+document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("[data-jump]");if(!b)return;var k=b.dataset.jump;sel.k=(sel.k.length===1&&sel.k[0]===k)?[]:[k];pick=null;buildFilters();renderList()});
+var TIPS=[['.nav button[data-v="start"]',"Schnelle Auswahl nach Situation"],['.nav button[data-v="lex"]',"Alle Spiele und Übungen"],['.nav button[data-v="bauen"]',"Spiel oder Stunde zusammenstellen"],['.subnav button[data-v="bauen"]',"Neues Spiel aus Übungen"],['.nav button[data-v="stunde"]',"Stunde aus dem Lexikon vorschlagen"],['.nav button[data-v="heute"]',"Deine Auswahl fürs nächste Training"],['#rnd',"Zeigt ein zufälliges Spiel"],['#newbtn',"Eigenes Spiel oder Übung anlegen"],['#more',"Filter: Mobilität, Kategorie, Material, Dauer"],['#quick [data-o="kurz"]',"bis 5 Minuten"],['#all',"Zeigt alle Karten mit allen Details"],['#reset',"Zeigt wieder alle Einträge"],['.det [data-heute]',"Merkt den Eintrag fürs nächste Training"],['[data-karte]',"Speichert die Karte zum Ausdrucken"],['[data-edit]',"Text, Tafel und Stichworte ändern"],['[data-build]',"Öffnet „Spiel bauen“ mit dieser Übung"],['#h-save',"Alle Karten zum Ausdrucken"],['#h-clr',"Leert deine Auswahl"],['[data-gesp]',"Merkt das Datum. Nur du siehst es."],['[data-vote]',"Zählt als Daumen auf der Karte"],['#fontbtn',"Schrift größer oder normal"],['#quick [data-o="Favoriten"]',"Nur Einträge mit deinem Stern"],['#quick [data-o="Lange nicht gespielt"]',"Über 4 Wochen her oder noch nie"],['#b-rnd',"Wählt zufällig Übungen aus"],['#g-ai',"Claude schreibt daraus ein ganzes Spiel"],['#b-save',"Legt das Spiel als Idee im Lexikon ab"],['#sb-make',"Schlägt eine Stunde mit Alternativen vor"],['#sb-heute',"Legt die Stunde in „Für heute“"]];
+var HELP=false;try{HELP=localStorage.getItem("rk-hilfe")==="1"}catch(e){}
+function tipsApply(){TIPS.forEach(function(t){document.querySelectorAll(t[0]).forEach(function(el){if(el.getAttribute("data-tip")!==t[1]){el.setAttribute("data-tip",t[1]);el.title=t[1]}})})}
+function helpSet(on){HELP=on;document.body.classList.toggle("help",on);var b=$("helpbtn");if(b)b.setAttribute("aria-pressed",on);try{localStorage.setItem("rk-hilfe",on?"1":"0")}catch(e){}}
+document.addEventListener("click",function(ev){if(ev.target.closest&&ev.target.closest("#helpbtn"))helpSet(!HELP)});
+new MutationObserver(tipsApply).observe(document.body,{childList:true,subtree:true});tipsApply();helpSet(HELP);
+function thumb(g){var b=g.tf[0];if(!b||!b.o||!b.o.length)return "";
+  var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9,P=function(x,y){x=+x;y=+y;if(!isFinite(x)||!isFinite(y))return;if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y};
+  b.o.forEach(function(e){var t=e[0];if(t==="t")return;if(t==="p"){var a=e[1]||[];for(var i=0;i+1<a.length;i+=2)P(a[i],a[i+1])}else if(t==="m"||t==="z"){P(e[1],e[2]);P(+e[1]+ +e[3],+e[2]+ +e[4])}else if(t==="r"){P(e[1]-e[3],e[2]-e[3]);P(+e[1]+ +e[3],+e[2]+ +e[3])}else if(t==="l"||t==="s"||t==="w"){P(e[1],e[2]);P(e[3],e[4])}else P(e[1],e[2])});
+  if(x1<x0)return "";
+  var w=Math.max(40,x1-x0+16),hh=Math.max(26,y1-y0+16);if(w/hh<1.5)w=hh*1.5;else hh=w/1.5;
+  var vw=w*4,vh=hh*4,vx=X((x0+x1)/2)-vw/2,vy=Y((y0+y1)/2)-vh/2,u=vw/120,f=function(n){return Math.round(n*10)/10};
+  var pts=b.o.filter(function(e){return e[0]==="k"||e[0]==="h"||e[0]==="b"||e[0]==="q"}),dm=1e9;for(var pi=0;pi<pts.length;pi++)for(var pj=pi+1;pj<pts.length;pj++){var dd=Math.sqrt(Math.pow((pts[pi][1]-pts[pj][1])*4,2)+Math.pow((pts[pi][2]-pts[pj][2])*4,2));if(dd>0&&dd<dm)dm=dd}
+  var v=u*Math.max(.72,Math.min(1,dm/(13*u)));
+  var lay={m:0,z:0,r:0,l:1,s:1,p:2,w:2,q:3,h:3,b:4,k:5},arr=b.o.filter(function(e){return e[0]!=="t"}).sort(function(a,c){return(lay[a[0]]||0)-(lay[c[0]]||0)});
+  var ds='stroke-width:'+f(1.5*u)+';stroke-dasharray:'+f(4*u)+' '+f(3*u);
+  var h='<svg viewBox="'+f(vx)+' '+f(vy)+' '+f(vw)+' '+f(vh)+'">';
+  arr.forEach(function(e){var t=e[0],x=X(+e[1]),y=Y(+e[2]);
+    if(t==="m")h+='<rect class="tv-mat" x="'+x+'" y="'+y+'" width="'+e[3]*4+'" height="'+e[4]*4+'" rx="'+f(2*u)+'"/>';
+    else if(t==="z")h+='<rect class="tv-zone" style="'+ds+'" x="'+x+'" y="'+y+'" width="'+e[3]*4+'" height="'+e[4]*4+'" rx="'+f(3*u)+'"/>';
+    else if(t==="r")h+='<circle class="tv-zone" style="'+ds+'" cx="'+x+'" cy="'+y+'" r="'+e[3]*4+'"/>';
+    else if(t==="l")h+='<line class="tv-line" style="'+ds+'" x1="'+x+'" y1="'+y+'" x2="'+X(+e[3])+'" y2="'+Y(+e[4])+'"/>';
+    else if(t==="s")h+='<line class="tv-rope" style="stroke-width:'+f(2.5*u)+'" x1="'+x+'" y1="'+y+'" x2="'+X(+e[3])+'" y2="'+Y(+e[4])+'"/>';
+    else if(t==="w")h+='<line class="tv-w" style="stroke-width:'+f(2*u)+';stroke-dasharray:'+f(4*u)+' '+f(3*u)+'" x1="'+x+'" y1="'+y+'" x2="'+X(+e[3])+'" y2="'+Y(+e[4])+'"/>';
+    else if(t==="p"){var a=e[1]||[],n=a.length-(a.length%2),d="";for(var i=0;i+1<n;i+=2)d+=(i?" L":"M")+X(+a[i])+" "+Y(+a[i+1]);if(n>=4){var bx=X(+a[n-2]),by=Y(+a[n-1]),ang=Math.atan2(by-Y(+a[n-3]),bx-X(+a[n-4])),L=7*u,W=4*u,c=Math.cos(ang),s=Math.sin(ang);h+='<path class="tv-p" style="stroke-width:'+f(2.4*u)+'" d="'+d+'"/><polygon style="fill:var(--path)" points="'+f(bx+c*2*u)+','+f(by+s*2*u)+' '+f(bx-c*L-s*W)+','+f(by-s*L+c*W)+' '+f(bx-c*L+s*W)+','+f(by-s*L-c*W)+'"/>'}}
+    else if(t==="q")h+='<rect class="tv-q" x="'+f(x-5*v)+'" y="'+f(y-5*v)+'" width="'+f(10*v)+'" height="'+f(10*v)+'" rx="'+f(2*v)+'"/>';
+    else if(t==="h")h+='<polygon class="tv-h" style="stroke:var(--ks);stroke-width:'+f(u)+'" points="'+x+','+f(y-6*v)+' '+f(x-5.5*v)+','+f(y+5*v)+' '+f(x+5.5*v)+','+f(y+5*v)+'"/>';
+    else if(t==="b")h+='<circle class="tv-ball" style="stroke-width:'+f(u)+'" cx="'+x+'" cy="'+y+'" r="'+f(4*v)+'"/>';
+    else if(t==="k")h+='<circle class="tv-k'+([1,2,3].indexOf(+e[4])>-1?+e[4]:1)+'" cx="'+x+'" cy="'+y+'" r="'+f(6.5*v)+'" style="stroke:var(--ks);stroke-width:'+f(u)+'"/>';
+  });
+  return '<div class="thumb" aria-hidden="true">'+h+'</svg></div>'}
+function card(g){
+  var open=openAll||pick===g||openIds[g.id];
+  var h='<details class="card'+(isUeb(g)?' ueb':'')+(pick===g?' pick':'')+'" data-id="'+esc(g.id)+'"'+(open?' open':'')+' style="'+kst(g.k)+'"><summary>'+thumb(g)+'<div class="cb"><h3>'+famIcon(g.k)+'<span>'+esc(g.n)+'</span>';
+  
+  if(g.status==="idee")h+='<span class="badge b-idee">Idee</span>';else if(g.neu)h+='<span class="badge b-neu">NEU</span>';
+  h+='</h3>';
+  if(g.a.length)h+='<p class="aka">Auch: '+g.a.map(esc).join(", ")+'</p>';
+  h+='<p class="teaser">'+esc(g.t)+'</p><div class="tags">'+marks(g)+mobMeter(g.mobs)+myMarks(g);
+  if(g.arm.length)h+='<span class="tag arm">Arm/Hand angepasst</span>';
+  
+  
+  h+='</div></div>'+favBtn(g)+'</summary>';
+  if(!open)return h+'</details>';
+  return h+detail(g)+'</details>';
+}
+function detail(g){
+  var h='<div class="det">';
+  if(g.note)h+='<p class="note">'+esc(g.note)+'</p>';
+  if(g.z.length||g.f.length)h+='<div class="tags">'+g.z.concat(g.f).map(function(t){return '<span class="tag">'+esc(t)+'</span>'}).join("")+'</div>';
+  if(g.tf.length)h+=tafelBlock(g.tf);
+  g.sec.forEach(function(s){h+=secH(s)});
+  if(g.arm.length)h+='<div class="box arm"><h4>Ohne oder geringe Arm- und Handfunktion</h4>'+paraList(g.arm)+'</div>';
+  if(g.sicher)h+='<div class="box safe"><h4>Sicherheit</h4><p>'+esc(g.sicher)+'</p></div>';
+  var bs=g.bau.map(byId).filter(Boolean),ui=usedIn(g.id);
+  if(bs.length)h+='<div class="sec"><h4>'+(isUeb(g)?'Baut auf, einzeln üben':'Einzeln üben (Bausteine)')+'</h4><div class="rowb">'+bs.map(function(b){return '<button type="button" class="btn3" data-go="'+esc(b.id)+'">'+esc(b.n)+'</button>'}).join("")+'</div></div>';
+  if(ui.length)h+='<div class="sec"><h4>Steckt in diesen Spielen</h4><div class="rowb">'+ui.map(function(b){return '<button type="button" class="btn3" data-go="'+esc(b.id)+'">'+esc(b.n)+'</button>'}).join("")+'</div></div>';
+  
+  if(isUeb(g))h+='<div class="rowb"><button type="button" class="btn3" data-build="'+esc(g.id)+'">Mit dieser Übung ein Spiel bauen</button></div>';
+  h+='<div class="sec"><h4>Erfahrungen</h4><div class="notes">';
+  var ns=NOTES[g.id]||[];
+  if(!ns.length)h+='<p class="meta">Noch keine Notiz. Schreib kurz, wie es in der Gruppe geklappt hat.</p>';
+  ns.forEach(function(n){h+='<div class="nt">'+esc(n.text)+'<div class="who"><span class="nm" data-uid="'+esc(n.von||"")+'">'+(n.von===ME?"du":"jemand")+'</span>, '+dmy(n.am)+(n.von&&n.von===ME?' · <button type="button" class="link" data-ndel="'+esc(n.id)+'">löschen</button>':'')+'</div></div>'});
+  if(DB&&CANW!==false)h+='<div class="rowb"><button type="button" class="btn3" data-vote="'+esc(g.id)+'|gut">'+tic(THUP)+' Lief gut</button><button type="button" class="btn3" data-vote="'+esc(g.id)+'|zaeh">'+tic(THDN)+' War zäh</button></div>';
+  if(DB&&CANW!==false)h+='<form class="nin" data-note="'+esc(g.id)+'"><input id="ni-'+esc(g.id)+'" type="text" maxlength="400" placeholder="z. B. Do-Gruppe: lief gut mit 2 Fängern" aria-label="Neue Notiz"><button class="btn2" type="submit">Notiz speichern</button></form>';
+  h+='</div></div>';
+  h+=simHTML(g);
+  var inH=EIN.indexOf(g.id)>-1,gT=playedToday(g.id);
+  h+='<div class="rowb"><button type="button" class="btn2" data-heute="'+esc(g.id)+'" aria-pressed="'+inH+'">'+(inH?"✓ Für heute":"+ Für heute")+'</button><button type="button" class="btn3" data-gesp="'+esc(g.id)+'" aria-pressed="'+gT+'">'+(gT?"✓ Heute gespielt":"Heute gespielt")+'</button>';
+  if(DLS)h+='<button type="button" class="btn3" data-karte="'+esc(g.id)+'">Druck-Karte speichern</button>';
+  if(DB&&CANW!==false)h+='<button type="button" class="btn3" data-edit="'+esc(g.id)+'">Bearbeiten</button>';
+  if(DB&&CANW!==false&&g.status==="idee")h+='<span class="rowb" data-delrow="'+esc(g.id)+'"><button type="button" class="btn3" data-del="ask">Idee löschen</button></span>';
+  h+='</div>';
+  if(g.geaendert&&g.geaendert.am)h+='<p class="meta">Zuletzt geändert am '+dmy(g.geaendert.am)+(g.geaendert.von?' von <span class="nm" data-uid="'+esc(g.geaendert.von)+'">'+(g.geaendert.von===ME?"dir":"jemandem")+'</span>':'')+'.</p>';
+  else if(g.erstellt)h+='<p class="meta">Angelegt am '+dmy(g.erstellt)+'.</p>';
+  return h+'</div>';
+}
+function fillNames(){
+  if(!U||!U.profiles)return;var ids=[];document.querySelectorAll(".nm[data-uid]").forEach(function(e){var u=e.dataset.uid;if(u&&u!==ME&&ids.indexOf(u)<0)ids.push(u)});
+  if(!ids.length)return;
+  U.profiles(ids).then(function(ps){document.querySelectorAll(".nm[data-uid]").forEach(function(e){var p=ps[e.dataset.uid];if(p&&p.name&&e.dataset.uid!==ME)e.textContent=p.name})}).catch(function(){});
+}
+function renderList(){
+  $("hcnt").textContent=EIN.length;
+  if(!G.length){$("count").textContent="";$("list").innerHTML='<div class="empty">'+(STATE==="laden"?"Die Einträge werden geladen …":STATE==="aus"?"Die Einträge liegen in der Datenbank dieser Seite. Sie sind nur sichtbar, wenn du angemeldet bist.":STATE==="fehler"?"Die Einträge konnten nicht geladen werden. Lade die Seite neu.":"Noch keine Einträge. Lege mit „Neuer Eintrag“ den ersten an.")+'</div>';return}
+  var res=pick?[pick]:G.filter(match),ns=res.filter(function(g){return !isUeb(g)}).length;
+  $("count").textContent=pick?"Zufallstreffer":res.length+" von "+G.length+" Einträgen ("+ns+" Spiele, "+(res.length-ns)+" Übungen)";
+  $("all").textContent=openAll?"Alle zuklappen":"Alle aufklappen";
+  var h="";
+  if(!res.length)h='<div class="empty">Kein Treffer. Nimm ein Stichwort weg oder setze die Filter zurück.</div>';
+  else{var last=null;res.forEach(function(g){if(String(g.k)!==last){h+='<div class="cat" data-cat="'+esc(String(g.k))+'" style="'+kst(g.k)+'">'+famIcon(g.k)+esc(catName(g.k))+'</div>';last=String(g.k)}h+=card(g)})}
+  var jk=[];G.forEach(function(g){var k=String(g.k);if(jk.indexOf(k)<0)jk.push(k)});jk.sort(function(a,b){return a-b});$("jump").innerHTML=pick?"":jk.map(function(k){return '<button type="button" class="jb" aria-pressed="'+(sel.k.length===1&&sel.k[0]===k)+'" style="'+kst(k)+'" data-jump="'+esc(k)+'" title="'+esc(catName(k))+'" aria-label="'+esc(catName(k))+'">'+famIcon(k)+'</button>'}).join("");$("list").innerHTML=h;fillNames();
+}
+/* ---------- Editor ---------- */
+var TOOLS=[["k","Kind"],["k2","Team 2"],["k3","Fänger"],["h","Hütchen"],["b","Ball"],["q","Gegenstand"],["m","Matte"],["z","Zone"],["r","Reifen"],["l","Linie"],["s","Seil"],["p","Fahrweg"],["w","Wurf"],["t","Text"],["x","Radierer"]];
+var ED=null;
+function openEditor(id){
+  var raw=id?JSON.parse(JSON.stringify(RAW[id])):{typ:"spiel",k:9,n:"",a:[],sec:[{h:"So geht's",v:false,p:[""]}],arm:[],z:[],f:[],mat:[],d:"mittel",do:0,fit:0,neu:1,status:"idee",tf:[],bau:[],mob:[3,4,5]};
+  if(!Array.isArray(raw.mat))raw.mat=matsOf(raw);
+  raw.mob=mobOf(raw);raw.tf=raw.tf||[];raw.sec=raw.sec||[];raw.arm=raw.arm||[];raw.bau=raw.bau||[];raw.pass=raw.pass||{};
+  ED={id:id,d:raw,board:0,tool:"k",pts:[],lab:""};editing=id||"neu";
+  setView("lex");drawEditor();$("editor").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function chipsEd(key,opts,nm){var h='<div class="chips">';opts.forEach(function(o){var on=key==="d"?ED.d.d===o:(ED.d[key]||[]).indexOf(o)>-1;h+='<button type="button" class="chip" data-ek="'+key+'" data-eo="'+esc(o)+'" aria-pressed="'+on+'">'+esc(nm?nm(o):o)+'</button>'});return h+'</div>'}
+function drawEditor(){
+  if(!ED){$("editor").innerHTML="";return}
+  var d=ED.d,h='<form class="form" id="edf" novalidate><h2>'+(ED.id?"Eintrag bearbeiten":"Neuer Eintrag")+'</h2>';
+  h+='<div class="two"><label for="e-n">Name<input id="e-n" type="text" value="'+esc(d.n)+'"></label><label for="e-typ">Art<select id="e-typ"><option value="spiel"'+(d.typ!=="uebung"?" selected":"")+'>Spiel</option><option value="uebung"'+(d.typ==="uebung"?" selected":"")+'>Übung</option></select></label></div>';
+  h+='<div class="two"><label for="e-k">Kategorie<select id="e-k">'+Object.keys(CFG.cats).sort(function(a,b){return a-b}).map(function(k){return '<option value="'+k+'"'+(String(d.k)===k?" selected":"")+'>'+esc(catName(k))+'</option>'}).join("")+'</select></label><label for="e-a">Auch bekannt als<input id="e-a" type="text" value="'+esc((d.a||[]).join(", "))+'" placeholder="mit Komma trennen"></label></div>';
+  h+='<div class="two"><label for="e-st">Stand<select id="e-st"><option value="fertig"'+(d.status!=="idee"?" selected":"")+'>fertig</option><option value="idee"'+(d.status==="idee"?" selected":"")+'>Idee, noch offen</option></select></label><label for="e-note">Kurze Notiz oben<input id="e-note" type="text" value="'+esc(d.note||"")+'"></label></div>';
+  h+='<div class="fl">Abschnitte <span class="hint">Leerzeile = neuer Punkt. „Anpassen“ mit „Einfacher:“ und „Fordernder:“ wird als Tabelle gezeigt.</span></div><div id="e-secs" style="display:grid;gap:8px">';
+  d.sec.forEach(function(s,i){h+='<div class="sedit"><div class="rowb"><input id="e-sh-'+i+'" type="text" value="'+esc(s.h)+'" aria-label="Überschrift" style="flex:1 1 180px"><button type="button" class="btn3" data-smv="'+i+'|-1" aria-label="nach oben">↑</button><button type="button" class="btn3" data-smv="'+i+'|1" aria-label="nach unten">↓</button><button type="button" class="btn3" data-sdel="'+i+'">entfernen</button></div><textarea id="e-sp-'+i+'" aria-label="Text">'+esc((s.p||[]).join("\n\n"))+'</textarea></div>'});
+  h+='</div><div class="rowb"><button type="button" class="btn3" data-sadd="So geht\'s">+ So geht\'s</button><button type="button" class="btn3" data-sadd="Varianten">+ Varianten</button><button type="button" class="btn3" data-sadd="Anpassen">+ Anpassen</button><button type="button" class="btn3" data-sadd="Stufen">+ Stufen</button><button type="button" class="btn3" data-sadd="Tipps">+ Tipps</button><button type="button" class="btn3" data-sadd="">+ eigener Abschnitt</button></div>';
+  h+='<label for="e-arm">Ohne oder geringe Arm- und Handfunktion <span class="hint">Leerzeile = neuer Punkt</span><textarea id="e-arm">'+esc(d.arm.join("\n\n"))+'</textarea></label>';
+  h+='<label for="e-sicher">Sicherheit <span class="hint">nur wenn nötig</span><input id="e-sicher" type="text" value="'+esc(d.sicher||"")+'"></label>';
+  
+  h+='<div class="fl">Ziel</div>'+chipsEd("z",CFG.ziele);
+  h+='<div class="fl">Spielform</div>'+chipsEd("f",CFG.formen);
+  h+='<div class="fl">Material <span class="hint">nichts gewählt = ohne Material</span></div>'+chipsEd("mat",CFG.mats);
+  h+='<div class="fl">Dauer</div>'+chipsEd("d",["kurz","mittel","lang"],function(o){return DL[o]});
+  h+='<div class="fl">Passt für Mobilität <span class="hint">alle Stufen antippen, für die der Eintrag passt, mit der Anpassung</span></div><div class="chips">'+[1,2,3,4,5].map(function(v){return '<button type="button" class="chip" data-emob="'+v+'" aria-pressed="'+(d.mob.indexOf(v)>-1)+'">'+v+' '+esc(mobName(v))+'</button>'}).join("")+'</div>';
+  h+='<div class="fl">Markierung</div><div class="chips"><button type="button" class="chip" data-eflag="neu" aria-pressed="'+!!d.neu+'">NEU</button></div>';
+  var ub=G.filter(function(x){return isUeb(x)&&x.id!==ED.id});
+  h+='<div class="fl">Bausteine <span class="hint">Aus welchen Übungen besteht das Spiel?</span></div><div class="chk">'+(ub.length?ub.map(function(u){return '<button type="button" class="chip" data-ebau="'+esc(u.id)+'" aria-pressed="'+(d.bau.indexOf(u.id)>-1)+'">'+esc(u.n)+'</button>'}).join(""):'<span class="hint">Noch keine Übungen angelegt.</span>')+'</div>';
+  h+='<div class="fl">Taktiktafel</div><div class="ted" id="ted"></div>';
+  h+='<div class="rowb"><button class="btn" type="submit" id="e-save">Speichern</button><button class="btn2" type="button" id="e-cancel">Abbrechen</button></div><p class="msg" id="e-msg" role="status"></p></form>';
+  $("editor").innerHTML=h;drawTed();
+}
+function drawTed(){
+  var d=ED.d,b=d.tf[ED.board],h='<div class="rowb">';
+  d.tf.forEach(function(x,i){h+='<button type="button" class="btn3" data-tb="'+i+'" aria-pressed="'+(i===ED.board)+'">'+esc(x.t||("Tafel "+(i+1)))+'</button>'});
+  h+='<button type="button" class="btn3" data-tb="neu">+ Tafel</button>';
+  if(b)h+='<button type="button" class="btn3" data-tb="del">Tafel entfernen</button>';
+  h+='</div>';
+  if(b){
+    h+='<div class="two"><label for="e-tt">Titel der Tafel<input id="e-tt" type="text" value="'+esc(b.t||"")+'" placeholder="z. B. Aufbau oder Variante"></label><label for="e-lab">Beschriftung für das nächste Teil<input id="e-lab" type="text" value="'+esc(ED.lab)+'" placeholder="z. B. A, 1, Start"></label></div>';
+    h+='<div class="tools">'+TOOLS.map(function(t){return '<button type="button" class="btn3" data-tool="'+t[0]+'" aria-pressed="'+(ED.tool===t[0])+'">'+t[1]+'</button>'}).join("")+'</div>';
+    var hint={p:"Tippe Punkt für Punkt, dann „Fahrweg fertig“.",l:"Tippe Anfang und Ende.",s:"Tippe Anfang und Ende.",w:"Tippe Start und Ziel des Balls.",m:"Tippe zwei Ecken.",z:"Tippe zwei Ecken.",x:"Tippe auf ein Teil, um es zu löschen."}[ED.tool]||"Tippe auf die Tafel, um das Teil zu setzen.";
+    h+='<p class="hint" style="margin:0">'+hint+(ED.pts.length?" ("+ED.pts.length/2+" Punkt"+(ED.pts.length>2?"e":"")+" gesetzt)":"")+'</p>';
+    h+=tafelSVG(b.o.concat(ED.pts.length>=2&&ED.tool==="p"?[["p",ED.pts]]:[]),b.mid,true);
+    h+='<div class="rowb">'+(ED.tool==="p"?'<button type="button" class="btn3" id="t-pend">Fahrweg fertig</button>':'')+'<button type="button" class="btn3" id="t-undo">Rückgängig</button><button type="button" class="btn3" id="t-mid" aria-pressed="'+(b.mid!==false)+'">Mittellinie</button><button type="button" class="btn3" id="t-clr">Tafel leeren</button></div>';
+  }else h+='<p class="hint" style="margin:0">Noch keine Tafel. Tippe auf „+ Tafel“.</p>';
+  $("ted").innerHTML=h;
+}
+function boardXY(svg,ev){var r=svg.getBoundingClientRect(),x=(ev.clientX-r.left)/r.width*410,y=(ev.clientY-r.top)/r.height*250;return[Math.max(0,Math.min(100,Math.round((x-5)/4))),Math.max(0,Math.min(60,Math.round((y-5)/4)))]}
+function tedClick(ev){
+  var svg=ev.target.closest("svg");if(!svg||!ED)return;var b=ED.d.tf[ED.board];if(!b)return;
+  var p=boardXY(svg,ev),t=ED.tool,lab=($("e-lab")||{}).value||"";ED.lab=lab;
+  if(t==="x"){var ix=ev.target.getAttribute("data-ix");if(ix!=null){b.o.splice(+ix,1);drawTed()}return}
+  if(t==="k"||t==="k2"||t==="k3"){b.o.push(["k",p[0],p[1],lab,t==="k"?1:t==="k2"?2:3]);bumpLab()}
+  else if(t==="h"){b.o.push(["h",p[0],p[1],lab]);bumpLab()}
+  else if(t==="b")b.o.push(["b",p[0],p[1]]);
+  else if(t==="q")b.o.push(["q",p[0],p[1],lab]);
+  else if(t==="t"){if(!lab){$("e-lab").focus();return}b.o.push(["t",p[0],p[1],lab])}
+  else if(t==="r")b.o.push(["r",p[0],p[1],6,lab]);
+  else if(t==="p"){ED.pts.push(p[0],p[1])}
+  else{ED.pts.push(p[0],p[1]);if(ED.pts.length===4){var a=ED.pts;ED.pts=[];
+    if(t==="m"||t==="z")b.o.push([t,Math.min(a[0],a[2]),Math.min(a[1],a[3]),Math.max(2,Math.abs(a[2]-a[0])),Math.max(2,Math.abs(a[3]-a[1])),lab]);
+    else if(t==="l")b.o.push(["l",a[0],a[1],a[2],a[3],lab]);else b.o.push([t,a[0],a[1],a[2],a[3]])}}
+  drawTed();
+}
+function bumpLab(){var l=ED.lab;if(/^\d+$/.test(l))ED.lab=String(+l+1);else if(/^[A-Y]$/.test(l))ED.lab=String.fromCharCode(l.charCodeAt(0)+1)}
+function readEditor(){
+  var d=ED.d;d.n=$("e-n").value.trim();d.typ=$("e-typ").value;d.k=+$("e-k").value;d.status=$("e-st").value;d.note=$("e-note").value.trim();
+  d.a=$("e-a").value.split(",").map(function(s){return s.trim()}).filter(Boolean);
+  d.sec=d.sec.map(function(s,i){var hh=$("e-sh-"+i),pp=$("e-sp-"+i);return{h:hh?hh.value.trim():s.h,v:!!s.v,p:pp?pp.value.split(/\n\s*\n/).map(function(x){return x.trim()}).filter(Boolean):s.p}});
+  d.arm=$("e-arm").value.split(/\n\s*\n/).map(function(x){return x.trim()}).filter(Boolean);
+  d.sicher=$("e-sicher").value.trim();
+  
+  var tt=$("e-tt");if(tt&&d.tf[ED.board])d.tf[ED.board].t=tt.value.trim();
+  var lb=$("e-lab");if(lb)ED.lab=lb.value;
+}
+async function saveEditor(){
+  readEditor();var d=ED.d,msg=$("e-msg");
+  if(!d.n){msg.textContent="Gib dem Eintrag zuerst einen Namen.";msg.className="msg err";$("e-n").focus();return}
+  if(!DB){msg.textContent="Speichern geht gerade nicht. Lade die Seite neu.";msg.className="msg err";return}
+  d.sec=d.sec.filter(function(s){return s.h||s.p.length});
+  if(!d.pass||(!d.pass.b&&!d.pass.s&&!d.pass.g))delete d.pass;
+  if(!d.sicher)delete d.sicher;
+  delete d.m;delete d.do;delete d.fit;delete d.donote;
+  d.geaendert={von:ME||"",am:today()};
+  var id=ED.id;
+  if(!id){var base=slug(d.n);id=base;var i=2;while(RAW[id])id=base+"-"+(i++);d.erstellt=today();d.o=9999}
+  $("e-save").disabled=true;msg.textContent="Wird gespeichert …";msg.className="msg";
+  try{await DB.collection("spiele").doc(id).set(d);ED=null;editing=null;$("editor").innerHTML="";openIds[id]=1;renderList();
+    setTimeout(function(){var c=document.querySelector('.card[data-id="'+id+'"]');if(c)c.scrollIntoView({behavior:"smooth",block:"start"})},300)}
+  catch(err){msg.textContent=err&&err.code==="invalid_argument"?"Du hast keine Schreibrechte für diese Seite. Frag die Besitzerin oder den Besitzer.":"Speichern hat nicht geklappt. Prüfe die Verbindung und versuche es noch einmal.";msg.className="msg err";$("e-save").disabled=false}
+}
+/* ---------- Spiel bauen ---------- */
+var FORMSLOT={"Staffel":"am Wendepunkt","Fänger":"wenn man gefangen wurde, um wieder frei zu sein","Stationen":"als eigene Station","Zirkel":"als eigene Station","Musik":"beim Musik-Stopp","Kreis":"wenn man an der Reihe ist","Parcours":"als zusätzliche Station im Parcours","Freies Fahren":"auf Zuruf der Trainerin","Paare":"bevor die Rollen getauscht werden","Ballspiel":"vor jedem Wurf oder Pass","Wettkampf":"als Aufgabe, um einen Punkt zu holen","Sammeln/Würfeln":"wenn eine 6 gewürfelt wird","Anschleichen":"wer erwischt wird, statt zurückzufahren"};
+function slotsOf(g){if(g.slots&&g.slots.length)return g.slots;var r=[];g.f.forEach(function(f){var s=FORMSLOT[f];if(s&&r.indexOf(s)<0)r.push(s)});if(r.indexOf("auf Zuruf der Trainerin")<0)r.push("auf Zuruf der Trainerin");return r}
+function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1):s}
+function stufeText(u,l){
+  var s=u.sec.filter(function(x){return /^(Stufen|Anpass|Schwierigkeit)/.test(x.h)})[0];if(!s)return "";
+  var t=(s.p||[]).join(" "),m=t.match(new RegExp("Stufe "+l+":\\s*(.*?)(?=\\s*Stufe \\d:|$)"));if(m)return m[1].trim();
+  var map={1:/(?:Einfacher|Leicht):\s*(.*?)(?=\s*(?:Fordernder|Mittel|Schwer):|$)/,2:/Mittel:\s*(.*?)(?=\s*Schwer:|$)/,3:/(?:Fordernder|Schwer):\s*(.*?)(?=\s*Wichtig:|$)/};
+  m=t.match(map[l]);return m?m[1].trim():"";
+}
+var LVN={1:"leicht",2:"mittel",3:"schwer"};
+/* Übung einbauen */
+var EB={};
+function einbauHTML(g){
+  var st=EB[g.id]||(EB[g.id]={u:"",slot:0,lvl:2}),ub=G.filter(function(x){return isUeb(x)&&g.bau.indexOf(x.id)<0});
+  if(!ub.length)return "";
+  var sl=slotsOf(g);if(st.slot>=sl.length)st.slot=0;
+  var h='<div class="sec einb" data-eb="'+esc(g.id)+'"><h4>Übung einbauen</h4><div class="two"><label class="fl" for="eb-u-'+esc(g.id)+'">Übung<select id="eb-u-'+esc(g.id)+'" data-ebsel="u"><option value="">bitte wählen</option>'+ub.map(function(u){return '<option value="'+esc(u.id)+'"'+(u.id===st.u?" selected":"")+'>'+esc(u.n)+'</option>'}).join("")+'</select></label><label class="fl" for="eb-s-'+esc(g.id)+'">Wo im Spiel?<select id="eb-s-'+esc(g.id)+'" data-ebsel="slot">'+sl.map(function(s,i){return '<option value="'+i+'"'+(i===st.slot?" selected":"")+'>'+esc(cap(s))+'</option>'}).join("")+'</select></label></div>';
+  h+='<div class="chips">'+[1,2,3].map(function(l){return '<button type="button" class="chip" data-eblvl="'+l+'" aria-pressed="'+(st.lvl===l)+'">'+LVN[l]+'</button>'}).join("")+'</div>';
+  var u=byId(st.u);
+  if(u){var v=einbauVar(g,u,sl[st.slot],st.lvl);h+='<div class="out">'+secH(v)+'</div>';if(DB&&CANW!==false)h+='<div class="rowb"><button type="button" class="btn2" data-ebsave="'+esc(g.id)+'">Als Variante speichern</button><span class="msg" role="status"></span></div>'}
+  return h+'</div>';
+}
+function einbauVar(g,u,slot,lvl){
+  var p=[cap(slot)+": zusätzlich die Übung „"+u.n+"“. "+u.t],s=stufeText(u,lvl);
+  if(s)p.push("Stufe "+LVN[lvl]+": "+s);
+  if(u.arm[0])p.push("Ohne oder geringe Arm- und Handfunktion: "+u.arm[0]);
+  if(u.mats.length){var miss=u.mats.filter(function(m){return g.mats.indexOf(m)<0});if(miss.length)p.push("Zusätzliches Material: "+miss.join(", ")+".")}
+  return{h:"Variante mit „"+u.n+"“",v:true,p:p};
+}
+async function einbauSave(id,btn){
+  var g=byId(id),st=EB[id],u=byId(st&&st.u),raw=RAW[id];if(!g||!u||!raw||!DB)return;
+  var v=einbauVar(g,u,slotsOf(g)[st.slot],st.lvl),sec=(raw.sec||[]).concat([v]),bau=(raw.bau||[]).concat([u.id]),mat=g.mats.slice();
+  u.mats.forEach(function(m){if(mat.indexOf(m)<0)mat.push(m)});
+  var msg=btn.nextElementSibling;btn.disabled=true;msg.textContent="Wird gespeichert …";
+  try{await DB.collection("spiele").doc(id).update({sec:sec,bau:bau,mat:mat,geaendert:{von:ME||"",am:today()}});delete EB[id]}
+  catch(e){btn.disabled=false;msg.textContent="Speichern hat nicht geklappt.";msg.className="msg err"}
+}
+/* Neues Spiel erzeugen */
+var GEN={mob:[],mat:[],lvl:2,r:"staffel",d:"mittel",u:[],ai:null,busy:false,err:""};
+function genPool(){
+  return G.filter(function(u){if(!isUeb(u))return false;
+    for(var i=0;i<GEN.mob.length;i++)if(u.mobs.indexOf(GEN.mob[i])<0)return false;
+    if(GEN.mat.length){for(var j=0;j<u.mats.length;j++)if(GEN.mat.indexOf(u.mats[j])<0&&BASIS.indexOf(u.mats[j])<0)return false}
+    return true});
+}
+function chipRow(attr,opts,on,nm){return '<div class="chips">'+opts.map(function(o){return '<button type="button" class="chip" '+attr+'="'+esc(o)+'" aria-pressed="'+on(o)+'">'+esc(nm?nm(o):o)+'</button>'}).join("")+'</div>'}
+function renderBau(){
+  var pool=genPool(),ids=pool.map(function(u){return u.id});
+  GEN.u=GEN.u.filter(function(id){return ids.indexOf(id)>-1||!!byId(id)});
+  var h='<div class="gstep"><p class="fl">1 · Mobilität der Gruppe <span class="hint">alle Stufen antippen, die mitspielen</span></p>'+chipRow("data-gm",["1","2","3","4","5"],function(o){return GEN.mob.indexOf(+o)>-1},function(o){return o+" "+mobName(o)})+'</div>';
+  h+='<div class="gstep"><p class="fl">2 · Material, das du dabei hast <span class="hint">nichts gewählt = alles möglich. Klebeband und Pfeife zählen immer als vorhanden.</span></p>'+chipRow("data-gmat",CFG.mats,function(o){return GEN.mat.indexOf(o)>-1})+'</div>';
+  h+='<div class="gstep"><p class="fl">3 · Stufe, Spielform und Dauer</p>'+chipRow("data-gl",["1","2","3"],function(o){return GEN.lvl===+o},function(o){return LVN[o]})+chipRow("data-rah",CFG.rahmen.map(function(r){return r.id}),function(o){return GEN.r===o},function(o){return CFG.rahmen.filter(function(r){return r.id===o})[0].n})+chipRow("data-gd",["kurz","mittel","lang"],function(o){return GEN.d===o},function(o){return DL[o]})+'</div>';
+  h+='<div class="gstep"><p class="fl">4 · Übungen wählen, 1 bis 3 <span class="hint">'+pool.length+' passen zu Gruppe und Material</span></p>';
+  if(!pool.length)h+='<p class="msg">Keine Übung passt zu dieser Auswahl. Nimm eine Mobilitäts-Stufe oder ein Material weg.</p>';
+  else{var last=null;pool.forEach(function(u){if(String(u.k)!==last){if(last!==null)h+='</div>';h+='<p class="hint" style="margin:6px 0 4px">'+esc(catName(u.k).replace("Übung: ",""))+'</p><div class="chips">';last=String(u.k)}h+='<button type="button" class="chip" data-gu="'+esc(u.id)+'" aria-pressed="'+(GEN.u.indexOf(u.id)>-1)+'">'+esc(u.n)+'</button>'});h+='</div>'}
+  h+='<div class="rowb" style="margin-top:8px"><button class="btn2" id="b-rnd" type="button">Zufällig kombinieren</button></div></div>';
+  $("b-in").innerHTML=h;renderGenOut();
+}
+function genCompose(){
+  var us=GEN.u.map(byId).filter(Boolean),r=CFG.rahmen.filter(function(x){return x.id===GEN.r})[0];if(!us.length||!r)return null;
+  var names=us.map(function(u){return "„"+u.n+"“"}),nj=names.length>1?names.slice(0,-1).join(", ")+" und "+names[names.length-1]:names[0];
+  var sec=[{h:"So geht's",v:true,p:[r.text.replace("{b}",nj)].concat(us.map(function(u){return u.n+": "+u.t}))}];
+  var st=us.map(function(u){var s=stufeText(u,GEN.lvl);return s?u.n+": "+s:null}).filter(Boolean);
+  if(st.length)sec.push({h:"Stufe "+LVN[GEN.lvl],v:true,p:st});
+  sec.push({h:"Anpassen",v:true,p:["Einfacher: Jede Übung eine Stufe leichter, kürzere Strecke, mehr Zeit, kein Wettkampf. Fordernder: Jede Übung eine Stufe schwerer, auf Zeit, oder als Wettkampf zwischen zwei Teams."]});
+  var arm=[r.arm].concat(us.map(function(u){return u.arm[0]?u.n+": "+u.arm[0]:null}).filter(Boolean));
+  var mat=r.mat.slice();us.forEach(function(u){u.mats.forEach(function(m){if(mat.indexOf(m)<0)mat.push(m)})});
+  var mob=[1,2,3,4,5].filter(function(v){return us.every(function(u){return u.mobs.indexOf(v)>-1})});
+  var z=[];us.forEach(function(u){u.z.forEach(function(x){if(z.indexOf(x)<0)z.push(x)})});
+  var sich=us.map(function(u){return u.sicher}).filter(Boolean).join(" ");
+  return{n:r.n+": "+us.map(function(u){return u.n}).join(" + "),sec:sec,arm:arm,mat:mat,mob:mob,z:z.slice(0,4),f:[r.form],k:r.k,d:GEN.d,bau:us.map(function(u){return u.id}),tf:JSON.parse(JSON.stringify(r.tf||[])),sicher:sich};
+}
+function genCard(c,src){
+  var h='<div class="out" style="'+kst(c.k)+'"><div class="rowb"><h3 style="font-family:var(--f-display);margin:0;flex:1 1 auto">'+esc(c.n)+'</h3><span class="badge b-idee">'+src+'</span></div>';
+  if(c.tf&&c.tf.length)h+=tafelBlock(c.tf);
+  c.sec.forEach(function(s){h+=secH(s)});
+  if(c.arm&&c.arm.length)h+='<div class="box arm"><h4>Ohne oder geringe Arm- und Handfunktion</h4>'+paraList(c.arm)+'</div>';
+  if(c.sicher)h+='<div class="box safe"><h4>Sicherheit</h4><p>'+esc(c.sicher)+'</p></div>';
+  var miss=GEN.mat.length?c.mat.filter(function(m){return GEN.mat.indexOf(m)<0&&BASIS.indexOf(m)<0}):[];
+  h+='<p class="meta">'+mobMeter(c.mob)+(GEN.mob.length&&GEN.mob.some(function(v){return c.mob.indexOf(v)<0})?' <b style="color:var(--warn)">Passt nicht für alle gewählten Stufen. Nutze die Arm- und Hand-Anpassung.</b>':'')+'</p>';
+  h+='<p class="meta">Material: '+(c.mat.length?c.mat.map(esc).join(", "):"ohne Material")+(miss.length?' · <b style="color:var(--warn)">Fehlt dir: '+miss.map(esc).join(", ")+'</b>':'')+'</p>';
+  return h+'</div>';
+}
+function renderGenOut(){
+  var c=genCompose(),o=$("b-out");
+  if(!c){o.innerHTML='<p class="msg">Wähle mindestens eine Übung. Dann erscheint hier der Spielvorschlag.</p>';return}
+  var h="";
+  if(GEN.ai)h+=genCard(GEN.ai,"von Claude");
+  h+=(GEN.ai?'<details class="fg"><summary>Vorschlag nach Vorlage anzeigen</summary><div class="fb">'+genCard(c,"Vorlage")+'</div></details>':genCard(c,"Vorlage"));
+  h+='<div class="rowb">';
+  if(SAMPLE)h+='<button type="button" class="btn2" id="g-ai"'+(GEN.busy?" disabled":"")+'>'+(GEN.busy?"Claude schreibt …":GEN.ai?"Neu ausformulieren":"Mit Claude ausformulieren")+'</button>';
+  if(DB&&CANW!==false)h+='<button type="button" class="btn" id="b-save">Als Idee speichern</button>';
+  h+='<span class="msg" id="b-msg" role="status">'+esc(GEN.err)+'</span></div>';
+  if(SAMPLE&&!GEN.ai)h+='<p class="hint" style="margin:0">„Mit Claude ausformulieren“ schreibt einen ganzen Spielablauf mit Name, Tafel und Tipps. Das zählt zur Nutzung der Person, die den Knopf drückt.</p>';
+  o.innerHTML=h;
+}
+var SAMPLE=null;
+function genPrompt(c){
+  var us=GEN.u.map(byId).filter(Boolean),r=CFG.rahmen.filter(function(x){return x.id===GEN.r})[0];
+  var t="Du hilfst einem Trainer für Kinder im Rollstuhl (Rolli-Kids, Turnhalle). Erfinde EIN neues Spiel aus den Bausteinen unten. Schreibe auf Deutsch in kurzen, einfachen Sätzen, ohne Fachsprache, aber so ausführlich, dass eine Kollegin das Spiel ohne Rückfrage anleiten kann.\n\n";
+  t+="Spielform: "+r.n+" ("+r.text.replace("{b}","die Übungen")+")\n";
+  t+="Stufe: "+LVN[GEN.lvl]+"\nDauer: "+DL[GEN.d]+"\n";
+  t+="Mobilität der Gruppe (alle sollen mitspielen können): "+(GEN.mob.length?GEN.mob.map(function(v){var m=CFG.mobs[v-1];return v+" "+m.n+" ("+m.d+")"}).join("; "):"gemischt, nicht angegeben")+"\n";
+  t+="Vorhandenes Material: "+(GEN.mat.length?GEN.mat.join(", ")+" (nur dieses verwenden)":"beliebig, möglichst wenig")+"\n\nÜbungen:\n";
+  us.forEach(function(u,i){t+=(i+1)+". "+u.n+": "+(u.sec[0]?(u.sec[0].p||[]).join(" "):"")+"\n   Stufe "+LVN[GEN.lvl]+": "+(stufeText(u,GEN.lvl)||"-")+"\n   Ohne/geringe Arm- und Handfunktion: "+(u.arm.join(" ")||"-")+"\n"});
+  t+="\nAntworte NUR mit JSON in genau dieser Form:\n{\"n\":\"kurzer kindgerechter Name\",\"sec\":[{\"h\":\"So geht's\",\"p\":[\"Absatz\",\"Absatz\"]},{\"h\":\"Varianten\",\"p\":[\"...\"]},{\"h\":\"Anpassen\",\"p\":[\"Einfacher: ... Fordernder: ...\"]},{\"h\":\"Tipps\",\"p\":[\"...\"]}],\"arm\":[\"...\",\"...\"],\"sicher\":\"\",\"z\":[\"...\"],\"tafel\":{\"t\":\"Aufbau\",\"o\":[]}}\n\n";
+  t+="Regeln: \"So geht's\" hat 2 bis 4 Absätze (Aufbau, Ablauf, Ende). \"arm\" hat mindestens 3 konkrete Punkte für Kinder ohne oder mit geringer Arm- und Handfunktion, davon einer mit einer wichtigen Rolle für Kinder mit sehr wenig Mobilität (zum Beispiel Ansager, Schiedsrichter, Zähler). \"sicher\" nur wenn nötig, sonst leer. \"z\" aus: "+CFG.ziele.join(", ")+" (höchstens 4).\n";
+  t+="Taktiktafel \"tafel.o\": Halle von oben, x von 0 (links) bis 100 (rechts), y von 0 (oben) bis 60 (unten). Teile: [\"k\",x,y,\"A\",1] Kind Team 1, [\"k\",x,y,\"B\",2] Kind Team 2, [\"k\",x,y,\"F\",3] Fänger, [\"h\",x,y,\"1\"] Hütchen, [\"b\",x,y] Ball, [\"q\",x,y,\"Korb\"] Gegenstand, [\"m\",x,y,breite,höhe,\"Matte\"] Matte, [\"z\",x,y,breite,höhe,\"Zone\"] Zone, [\"r\",x,y,radius,\"Reifen\"] Reifen, [\"l\",x1,y1,x2,y2,\"Start\"] Linie, [\"s\",x1,y1,x2,y2] Seil, [\"p\",[x1,y1,x2,y2,...]] Fahrweg mit Pfeil, [\"w\",x1,y1,x2,y2] Ballweg, [\"t\",x,y,\"Text\"] Text. 8 bis 16 Teile, nichts überlappt, Beschriftungen höchstens 3 Wörter, Kinder mindestens 6 auseinander. Texte nicht höher als y=6 und nicht als Überschrift. Fahrwege folgen dem echten Weg: beim Slalom im Zickzack zwischen den Hütchen, bei Hin und Zurück zwei Pfeile mit etwas Abstand. Jedes Team bekommt seinen eigenen Fahrweg.";
+  return t;
+}
+var OKT={k:1,h:1,b:1,q:1,m:1,z:1,r:1,l:1,s:1,p:1,w:1,t:1};
+function cleanAI(x,c){
+  if(!x||typeof x!=="object"||typeof x.n!=="string"||!Array.isArray(x.sec))return null;
+  var num=function(v,mx){v=+v;return isFinite(v)?Math.max(0,Math.min(mx,Math.round(v))):0};
+  var sec=x.sec.filter(function(s){return s&&typeof s.h==="string"&&Array.isArray(s.p)}).map(function(s){return{h:s.h.slice(0,60),v:true,p:s.p.filter(function(p){return typeof p==="string"}).map(function(p){return p.slice(0,900)}).slice(0,8)}}).slice(0,8);
+  if(!sec.length)return null;
+  var o=[];((x.tafel&&Array.isArray(x.tafel.o))?x.tafel.o:[]).slice(0,24).forEach(function(e){if(!Array.isArray(e)||!OKT[e[0]])return;var t=e[0],L=function(v){return typeof v==="string"?v.slice(0,24):""};
+    if(t==="p"){if(Array.isArray(e[1])&&e[1].length>=4){var pts=[];for(var i=0;i+1<e[1].length&&i<24;i+=2)pts.push(num(e[1][i],100),num(e[1][i+1],60));o.push(["p",pts])}return}
+    if(t==="k")o.push(["k",num(e[1],100),num(e[2],60),L(e[3]),[1,2,3].indexOf(+e[4])>-1?+e[4]:1]);
+    else if(t==="m"||t==="z")o.push([t,num(e[1],100),num(e[2],60),Math.max(2,num(e[3],100)),Math.max(2,num(e[4],60)),L(e[5])]);
+    else if(t==="r")o.push(["r",num(e[1],100),num(e[2],60),Math.max(2,Math.min(20,num(e[3],20))),L(e[4])]);
+    else if(t==="l")o.push(["l",num(e[1],100),num(e[2],60),num(e[3],100),num(e[4],60),L(e[5])]);
+    else if(t==="s"||t==="w")o.push([t,num(e[1],100),num(e[2],60),num(e[3],100),num(e[4],60)]);
+    else if(t==="b")o.push(["b",num(e[1],100),num(e[2],60)]);
+    else if(t==="t")o.push(["t",num(e[1],100),Math.max(6,num(e[2],60)),L(e[3])]);
+    else o.push([t,num(e[1],100),num(e[2],60),L(e[3])]);
+  });
+  var z=(Array.isArray(x.z)?x.z:[]).filter(function(v){return CFG.ziele.indexOf(v)>-1}).slice(0,4);
+  return{n:x.n.slice(0,60),sec:sec,arm:(Array.isArray(x.arm)?x.arm:[]).filter(function(p){return typeof p==="string"}).slice(0,6),sicher:typeof x.sicher==="string"?x.sicher.slice(0,400):"",z:z.length?z:c.z,tf:o.length?[{t:(x.tafel&&typeof x.tafel.t==="string")?x.tafel.t.slice(0,40):"Aufbau",o:o}]:c.tf,mat:c.mat,mob:c.mob,f:c.f,k:c.k,d:c.d,bau:c.bau};
+}
+async function genAI(){
+  var c=genCompose();if(!c||!SAMPLE||GEN.busy)return;
+  GEN.busy=true;GEN.err="";renderGenOut();
+  try{var x=await SAMPLE.json(genPrompt(c),{modelTier:"default"});var cl=cleanAI(x,c);if(cl)GEN.ai=cl;else GEN.err="Die Antwort war nicht brauchbar. Versuche es noch einmal."}
+  catch(e){var code=e&&e.code;GEN.err=code==="not_granted"?"Das Fragen an Claude ist für diese Seite nicht erlaubt.":code==="rate_limited"?"Gerade zu viele Anfragen. Versuche es in ein paar Minuten noch einmal.":code==="cancelled"?"":"Das hat nicht geklappt. Versuche es noch einmal."}
+  GEN.busy=false;renderGenOut();
+}
+async function saveBau(){
+  var c=GEN.ai||genCompose();if(!c||!DB)return;
+  var base=slug(c.n),id=base,i=2;while(RAW[id])id=base+"-"+(i++);
+  var d={typ:"spiel",k:c.k,n:c.n,a:[],note:"",sec:c.sec,arm:c.arm,z:c.z,f:c.f,mat:c.mat,mob:c.mob,d:c.d,neu:1,status:"idee",tf:c.tf,bau:c.bau,o:9999,erstellt:today(),geaendert:{von:ME||"",am:today()}};
+  if(c.sicher)d.sicher=c.sicher;
+  var m=$("b-msg");m.textContent="Wird gespeichert …";
+  try{await DB.collection("spiele").doc(id).set(d);GEN.ai=null;GEN.err="";m.textContent="Gespeichert als Idee unter „"+catName(c.k)+"“.";setTimeout(function(){goTo(id)},700)}catch(e){m.textContent="Speichern hat nicht geklappt.";m.className="msg err"}
+}
+/* ---------- Stunde bauen ---------- */
+var SB={dur:50,mob:[],z:[],mat:[],grp:"mittel",plan:null,saved:[],msg:""},SDOC=null;
+var SPLIT={45:[10,10,15,10],50:[10,10,20,10],60:[10,15,25,10],90:[15,20,40,15]};
+var PH=[{n:"Aufwärmen",ok:function(g){return !isUeb(g)&&(+g.k===1||+g.k===2)}},{n:"Übung",ok:function(g){return isUeb(g)}},{n:"Hauptteil",ok:function(g){return !isUeb(g)&&[2,3,4,5,6,7,9,10,11].indexOf(+g.k)>-1}},{n:"Abschluss",ok:function(g){return !isUeb(g)&&+g.k===8}}];
+var GRP={klein:"bis 6",mittel:"7 bis 12",gross:"13 und mehr"};
+function sbFits(g){if(g.status==="idee")return false;for(var i=0;i<SB.mob.length;i++)if(g.mobs.indexOf(SB.mob[i])<0)return false;if(SB.mat.length){for(var j=0;j<g.mats.length;j++)if(SB.mat.indexOf(g.mats[j])<0&&BASIS.indexOf(g.mats[j])<0)return false}return true}
+function sbScore(g){var s=Math.random()*2;SB.z.forEach(function(z){if(g.z.indexOf(z)>-1)s+=3});
+  if(SB.grp==="klein"&&g.f.indexOf("Staffel")>-1)s-=2;
+  if(SB.grp==="gross"&&g.f.some(function(f){return ["Staffel","Fänger","Kreis","Freies Fahren"].indexOf(f)>-1}))s+=1.5;
+  if(SB.grp==="gross"&&g.f.indexOf("Paare")>-1)s-=1;
+  if(g.arm.length)s+=.5;return s}
+function sbMake(){var used=[],sp=SPLIT[SB.dur];SB.plan=PH.map(function(ph,i){
+  var ids=G.filter(function(g){return ph.ok(g)&&sbFits(g)&&used.indexOf(g.id)<0}).map(function(g){return{id:g.id,s:sbScore(g)}}).sort(function(a,b){return b.s-a.s}).slice(0,3).map(function(x){return x.id});
+  ids.forEach(function(id){used.push(id)});return{p:ph.n,min:sp[i],ids:ids}})}
+function sbIds(){return SB.plan?SB.plan.map(function(r){return r.ids[0]}).filter(function(id){return !!byId(id)}):[]}
+function renderStunde(){
+  var h='<div class="gstep"><p class="fl">Dauer</p>'+chipRow("data-sbd",["45","50","60","90"],function(o){return SB.dur===+o},function(o){return o+" Min"})+'</div>';
+  h+='<div class="gstep"><p class="fl">Mobilität der Gruppe <span class="hint">alle Stufen antippen, die dabei sind</span></p>'+chipRow("data-sbm",["1","2","3","4","5"],function(o){return SB.mob.indexOf(+o)>-1},function(o){return o+" "+mobName(o)})+'</div>';
+  h+='<div class="gstep"><p class="fl">Schwerpunkt <span class="hint">nichts gewählt = gemischt</span></p>'+chipRow("data-sbz",CFG.ziele,function(o){return SB.z.indexOf(o)>-1})+'</div>';
+  h+='<div class="gstep"><p class="fl">Material, das du dabei hast <span class="hint">nichts gewählt = alles möglich. Klebeband und Pfeife zählen immer.</span></p>'+chipRow("data-sbmat",CFG.mats,function(o){return SB.mat.indexOf(o)>-1})+'</div>';
+  h+='<div class="gstep"><p class="fl">Gruppengröße</p>'+chipRow("data-sbg",["klein","mittel","gross"],function(o){return SB.grp===o},function(o){return GRP[o]})+'</div>';
+  h+='<div class="rowb"><button type="button" class="btn" id="sb-make">'+(SB.plan?"Neu mischen":"Vorschlag machen")+'</button></div>';
+  $("sb-in").innerHTML=h;renderSbOut();
+}
+function renderSbOut(){
+  var h="";
+  if(!G.length)h='<p class="msg">Die Einträge werden geladen …</p>';
+  else if(!SB.plan)h='<p class="msg">Stell oben ein, was passt, und tippe auf „Vorschlag machen“.</p>';
+  else{
+    var items=sbIds().map(byId),pack=[],common=[1,2,3,4,5].filter(function(v){return items.every(function(g){return g.mobs.indexOf(v)>-1})});
+    items.forEach(function(g){g.mats.forEach(function(m){if(pack.indexOf(m)<0)pack.push(m)})});
+    h+='<div class="out"><div class="sum"><span>Vorschlag · '+SB.plan.reduce(function(a,r){return a+r.min},0)+' Min</span></div><p class="meta">Alle Hauptspiele zusammen passen für: '+(common.length?mobMeter(common):"keine gemeinsame Stufe. Nutze die Anpassungen der Einträge.")+'</p>';
+    SB.plan.forEach(function(r,i){var g=byId(r.ids[0]);
+      if(!g){h+='<div class="sbr" style="'+kst(11)+'"><span class="sbp">'+esc(r.p)+' · '+r.min+' Min</span><span class="msg">Nichts passt. Nimm eine Mobilitäts-Stufe oder ein Material weg.</span></div>';return}
+      var alts=r.ids.slice(1).map(byId).filter(Boolean);
+      h+='<div class="sbr" style="'+kst(g.k)+'"><div class="sbh"><span class="sbp">'+esc(r.p)+' · '+r.min+' Min</span><button type="button" class="sbn" data-go="'+esc(g.id)+'">'+esc(g.n)+'</button>'+mobMeter(g.mobs)+(g.arm.length?'<span class="tag arm">Arm/Hand angepasst</span>':'')+'</div>';
+      if(alts.length)h+='<div class="rowb"><span class="meta">Alternativen:</span>'+alts.map(function(a,j){return '<button type="button" class="btn3" data-sbalt="'+i+'|'+(j+1)+'">'+esc(a.n)+'</button>'}).join("")+'</div>';
+      h+='</div>'});
+    h+='<p class="meta">Material gesamt: '+(pack.length?pack.map(esc).join(", "):"ohne Material")+'</p>';
+    h+='<div class="rowb"><button type="button" class="btn" id="sb-heute">In „Für heute“ übernehmen</button>'+(DLS?'<button type="button" class="btn3" id="sb-file">Karten als Datei speichern</button>':'')+'</div>';
+    
+    h+='<p class="msg" id="sb-msg" role="status">'+esc(SB.msg)+'</p></div>';
+  }
+  if(false){h+='<div><h3 style="font-family:var(--f-display);margin:6px 0">Meine gespeicherten Stunden</h3>';
+    if(!SB.saved.length)h+='<p class="msg">Noch keine. Mach einen Vorschlag und speichere ihn mit einem Namen.</p>';
+    else h+='<div class="sbs">'+SB.saved.map(function(s,i){return '<div class="hi" style="'+kst(11)+'"><div class="t"><b>'+esc(s.name)+'</b><span>'+s.dur+' Min · '+s.plan.map(function(r){var g=byId(r.ids[0]);return g?g.n:"–"}).map(esc).join(" · ")+' · '+dmy(s.am)+'</span></div><div class="rowb"><button type="button" class="btn3" data-sbload="'+i+'">Öffnen</button><button type="button" class="btn3" data-sbdel="'+i+'">Löschen</button></div></div>'}).join("")+'</div>';
+    h+='</div>'}
+  $("sb-out").innerHTML=h;
+}
+function sbTog(arr,v){var i=arr.indexOf(v);if(i>-1)arr.splice(i,1);else arr.push(v)}
+function sbPersist(){if(!SDOC)return Promise.resolve();return SDOC.set({list:SB.saved})}
+/* ---------- Für heute ---------- */
+var EDOC=null;
+function loadEin(){try{var s=localStorage.getItem("rk-heute");if(s)EIN=JSON.parse(s)||[]}catch(e){}}
+function saveEin(){try{localStorage.setItem("rk-heute",JSON.stringify(EIN))}catch(e){}if(EDOC)EDOC.set({ids:EIN,am:today()}).catch(function(){})}
+function toggleHeute(id){var i=EIN.indexOf(id);if(i>-1)EIN.splice(i,1);else EIN.push(id);saveEin();renderAll()}
+function renderHeute(){
+  var items=EIN.map(byId).filter(Boolean);
+  if(!items.length){$("h-out").innerHTML='<div class="panel"><p class="msg">Noch nichts ausgewählt. Öffne im Lexikon eine Karte und tippe auf „+ Für heute“.</p></div>';return}
+  var min=0,pack={};items.forEach(function(g){min+=g.min||MIN[g.d]||10;g.mats.forEach(function(m){(pack[m]=pack[m]||[]).push(g.n)})});
+  var common=[1,2,3,4,5].filter(function(v){return items.every(function(g){return g.mobs.indexOf(v)>-1})});
+  var h='<div class="panel"><div class="sum"><span>'+items.length+' Einträge</span><span>ca. '+min+' Minuten</span><span>'+Object.keys(pack).length+' Materialien</span></div><p class="meta">Alle Einträge zusammen passen für: '+(common.length?mobMeter(common):"keine gemeinsame Stufe. Prüfe die Anpassungen der einzelnen Einträge.")+'</p><div class="heute">';
+  items.forEach(function(g,i){h+='<div class="hi" style="'+kst(g.k)+'"><span class="nr">'+(i+1)+'</span><div class="t"><b>'+esc(g.n)+'</b><span>'+esc(catName(g.k))+' · '+DL[g.d]+' · '+mobRange(g.mobs)+(g.arm.length?' · Arm/Hand angepasst':'')+'</span></div><div class="rowb"><button type="button" class="btn3" data-hmv="'+i+'|-1" aria-label="nach oben">↑</button><button type="button" class="btn3" data-hmv="'+i+'|1" aria-label="nach unten">↓</button><button type="button" class="btn3" data-go="'+esc(g.id)+'">öffnen</button><button type="button" class="btn3" data-heute="'+esc(g.id)+'">entfernen</button></div></div>'});
+  h+='</div><div><h3 style="font-family:var(--f-display);margin:0 0 6px">Packliste</h3>';
+  h+=Object.keys(pack).length?'<ul class="pack">'+Object.keys(pack).sort().map(function(m){return '<li><b>'+esc(m)+'</b> <span class="meta">('+pack[m].map(esc).join(", ")+')</span></li>'}).join("")+'</ul>':'<p class="msg">Alles ohne Material.</p>';
+  h+='</div><div class="rowb">'+(DLS?'<button type="button" class="btn2" id="h-save">Alle Karten als Datei speichern</button>':'')+'<button type="button" class="btn2" id="h-clr">Liste leeren</button></div><p class="msg" id="h-msg" role="status"></p></div>';
+  $("h-out").innerHTML=h;
+}
+/* ---------- Fahr-Pass ---------- */
+function passItems(){var L={b:[],s:[],g:[]};G.forEach(function(g){if(!g.pass)return;["b","s","g"].forEach(function(l){if(g.pass[l])L[l].push({n:g.n,a:g.pass[l],id:g.id})})});return L}
+function renderPass(){
+  var L=passItems(),tot=L.b.length+L.s.length+L.g.length;
+  if(!tot){$("p-out").innerHTML='<div class="panel"><p class="msg">Noch keine Pass-Aufgaben. Sie kommen mit den Fahrtechnik-Übungen dazu.</p></div>';return}
+  var h='<div class="pass3">';[["b","Bronze","m-b"],["s","Silber","m-s"],["g","Gold","m-g"]].forEach(function(l){h+='<div><h3 class="'+l[2]+'">'+l[1]+'</h3><ol>'+L[l[0]].map(function(x){return '<li><button type="button" class="link" data-go="'+esc(x.id)+'" style="padding:0">'+esc(x.n)+'</button>: '+esc(x.a)+'</li>'}).join("")+'</ol></div>'});
+  h+='</div>'+(DLS?'<div class="rowb" style="margin-top:12px"><button type="button" class="btn" id="p-save">Pass als Datei speichern</button><span class="msg" id="p-msg" role="status"></span></div>':'');
+  $("p-out").innerHTML=h;
+}
+/* ---------- Dateien ---------- */
+var PRINTCSS='body{font:14px/1.45 "Atkinson Hyperlegible",Arial,sans-serif;color:#16282B;margin:0;padding:12mm}h1{font:700 22px Arial,sans-serif;margin:0 0 4px}h2{font:700 13px Arial;letter-spacing:.06em;text-transform:uppercase;margin:12px 0 3px;color:#1F3437}.k{page-break-after:always;max-width:180mm}.k:last-child{page-break-after:auto}.meta{color:#5B6E72;font-size:12px}.arm{background:#DDF1F7;padding:6px 9px;border-radius:6px}.safe{background:#FFF1D6;padding:6px 9px;border-radius:6px}svg{width:100%;max-width:160mm;height:auto}ul{margin:0;padding-left:18px}p{margin:0 0 4px}.leg{font-size:11px;color:#5B6E72;display:flex;flex-wrap:wrap;gap:4px 10px}.leg svg{width:18px;height:12px}.tv-board{fill:#fff;stroke:#B9C5C8;stroke-width:2}.tv-mid{stroke:#D5DEE0;stroke-width:1.5;stroke-dasharray:6 6}.tv-k1{fill:#00897B}.tv-k2{fill:#5E35B1}.tv-k3{fill:#D84315}.tv-kl{fill:#fff;font:700 11px Arial}.tv-h{fill:#F2A01E}.tv-ball{fill:#D84315;stroke:#fff;stroke-width:1.5}.tv-mat{fill:#C9D3D5;stroke:#B9C5C8}.tv-zone{fill:none;stroke:#5B6E72;stroke-width:1.5;stroke-dasharray:5 4}.tv-line{stroke:#5B6E72;stroke-width:1.5;stroke-dasharray:6 5}.tv-rope{stroke:#8D6E63;stroke-width:3}.tv-p{fill:none;stroke:#1F3437;stroke-width:2.2}.tv-w{fill:none;stroke:#D84315;stroke-width:2;stroke-dasharray:5 4}.tv-q{fill:#E2E8E9;stroke:#5B6E72}.tv-t{fill:#16282B;font:11px Arial}.tv-tm{fill:#5B6E72;font:10px Arial}table{border-collapse:collapse;width:100%}td,th{border:1px solid #B9C5C8;padding:6px;text-align:left;vertical-align:top}.st{width:16mm;height:16mm;border:1.5px dashed #5B6E72;border-radius:50%}@page{size:A4;margin:10mm}';
+function pathColorFix(svg){return svg.replace(/style="fill:var\(--path\)"/g,'style="fill:#1F3437"').replace(/style="fill:var\(--catch\)"/g,'style="fill:#D84315"')}
+function cardFile(g){
+  var h='<div class="k"><h1>'+esc(g.n)+'</h1><p class="meta">'+esc(catName(g.k))+' · '+DL[g.d]+' · Mobilität '+mobRange(g.mobs)+' · Material: '+(g.mats.length?g.mats.map(esc).join(", "):"ohne Material")+'</p>';
+  g.tf.forEach(function(b){h+=(b.t?'<h2>'+esc(b.t)+'</h2>':'')+pathColorFix(tafelSVG(b.o,b.mid))+pathColorFix(legend(b.o))});
+  g.sec.forEach(function(s){h+='<h2>'+esc(s.h)+'</h2>'+paraList(s.p||[])});
+  if(g.arm.length)h+='<h2>Ohne oder geringe Arm- und Handfunktion</h2><div class="arm">'+paraList(g.arm)+'</div>';
+  if(g.sicher)h+='<h2>Sicherheit</h2><div class="safe"><p>'+esc(g.sicher)+'</p></div>';
+  return h+'<p class="meta" style="margin-top:10px">Rolli-Kids-Lexikon, Stand '+dmy(today())+'</p></div>';
+}
+function fileDoc(title,body){return '<!doctype html><html lang="de"><head><meta charset="utf-8"><title>'+esc(title)+'</title><style>'+PRINTCSS+'</style></head><body>'+body+'</body></html>'}
+async function saveFile(name,html,msgEl){
+  if(!DLS)return;try{var r=await DLS.save({filename:name,data:new Blob([html],{type:"text/html"})});if(msgEl)msgEl.textContent=r==="saved"?"Gespeichert. Öffne die Datei und drucke sie aus.":""}catch(e){if(msgEl)msgEl.textContent=e&&e.code==="unavailable"?"Speichern geht in dieser Ansicht nicht.":"Nicht gespeichert."}
+}
+function passFile(){
+  var L=passItems(),b='<div class="k"><h1>Mein Fahr-Pass</h1><p>Name: ______________________________ &nbsp; Gruppe: ______________</p>';
+  [["b","Bronze"],["s","Silber"],["g","Gold"]].forEach(function(l){if(!L[l[0]].length)return;b+='<h2>'+l[1]+'</h2><table><tr><th>Übung</th><th>Aufgabe</th><th>Stempel</th></tr>'+L[l[0]].map(function(x){return '<tr><td>'+esc(x.n)+'</td><td>'+esc(x.a)+'</td><td><div class="st"></div></td></tr>'}).join("")+'</table>'});
+  return fileDoc("Fahr-Pass",b+'</div>');
+}
+/* ---------- Start und Gruppen ---------- */
+var MYG=[],SHG=[],AG=null,GED=null,GDOC=null,WAHL=null,GMSG="";
+var GRPK={klein:"bis 6 Kinder",mittel:"7 bis 12 Kinder",gross:"13 und mehr Kinder"};
+var TIC={warm:'<path d="M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z"/>',wild:FAMI.r,kurz:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',wenige:'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2 0 4 1.5 4 4"/>',ohne:'<rect x="4" y="7" width="16" height="12" rx="2"/><path d="M4 4l16 16"/>',wahl:'<path d="M12 3L14.7 8.6L20.8 9.4L16.3 13.6L17.5 19.6L12 16.6L6.5 19.6L7.7 13.6L3.2 9.4L9.3 8.6Z"/>'};
+var TILES=[{id:"warm",n:"Aufwärmen",k:1,s:{k:["1"]}},{id:"wild",n:"Gruppe ist wild",k:8,s:{z:["Ruhe","Konzentration"]}},{id:"kurz",n:"5 Minuten übrig",k:1,s:{d:["kurz"]}},{id:"wenige",n:"Wenige Kinder da",k:1,s:{f:["Paare","Kreis","Parcours","Freies Fahren","Stationen","Musik","Sammeln/Würfeln","Anschleichen","Einzelübung"]}},{id:"ohne",n:"Kein Material",k:1,s:{mat:["ohne Material"]}},{id:"wahl",n:"Kinder wählen",k:10}];
+Object.assign(TIC,{power:'<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>',ende:'<path d="M5 21V4M5 4h12l-2 4 2 4H5"/>',fahr:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/><path d="M12 4v6M12 14v6M4 12h6M14 12h6"/>',ball:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18"/>',spass:'<circle cx="12" cy="12" r="9"/><path d="M8.5 14c1 1.5 2.2 2 3.5 2s2.5-.5 3.5-2M9 9.5v.5M15 9.5v.5"/>',gross:'<circle cx="6" cy="9" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="18" cy="9" r="2.5"/><path d="M2 19c0-3 2-4 4-4M22 19c0-3-2-4-4-4M7 20c0-4 2-6 5-6s5 2 5 6"/>',lang:'<path d="M7 3h10v3l-5 6 5 6v3H7v-3l5-6-5-6z"/>',zufall:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8.5 8.5h.01M12 12h.01M15.5 15.5h.01"/>',kraft:'<path d="M3 12h18M6 8v8M18 8v8M3 10v4M21 10v4"/>',team:'<path d="M12 20l-7-7a4.5 4.5 0 0 1 7-5.5a4.5 4.5 0 0 1 7 5.5z"/>',wett:'<path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 3M16 6h3a3 3 0 0 1-3 3M12 13v4M9 20h6"/>',stat:'<circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M8 18h7a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h7"/>',alltag:FAMI.a,sport:'<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18M5 7c4 2 10 2 14 0"/>',alle:'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',arm:'<path d="M8 12V6a1.5 1.5 0 0 1 3 0v5M11 11V5a1.5 1.5 0 0 1 3 0v6M14 11V7a1.5 1.5 0 0 1 3 0v8a6 6 0 0 1-11 3l-2-4a1.5 1.5 0 0 1 3-1l1 1"/>',gut:'<path d="M7 11v9H4v-9zM7 11l4-7a2 2 0 0 1 3 2l-1 4h5a2 2 0 0 1 2 2l-2 7H7"/>',neu:'<path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/>',pass:'<circle cx="12" cy="9" r="5"/><path d="M9 13.5L7 21l5-3 5 3-2-7.5"/>'});
+TILES=[TILES[0],TILES[1],TILES[2],TILES[3],TILES[4],{id:"power",n:"Auspowern",k:1,s:{z:["Tempo","Ausdauer"]}},{id:"ende",n:"Abschluss",k:8,s:{k:["8"]}},{id:"fahr",n:"Fahrtechnik üben",k:12,s:{k:["12"]}},{id:"ball",n:"Mit Ball",k:7,s:{k:["7","15"]}},TILES[5],{id:"spass",n:"Nur Spaß",k:9,s:{k:["9"]}},{id:"gross",n:"Große Gruppe",k:1,s:{f:["Fänger","Staffel","Kreis","Freies Fahren"]}},{id:"lang",n:"Lange Einheit",k:1,s:{d:["lang"]}},{id:"zufall",n:"Überrasch mich",k:10,s:{}},{id:"kraft",n:"Kraft aufbauen",k:13,s:{z:["Kraft"]}},{id:"team",n:"Teamgeist",k:1,s:{z:["Teamgeist"]}},{id:"wett",n:"Wettkampf",k:5,s:{f:["Staffel","Wettkampf"]}},{id:"stat",n:"Stationen",k:6,s:{f:["Stationen","Zirkel","Parcours"]}},{id:"alltag",n:"Alltag üben",k:10,s:{k:["10"]}},{id:"sport",n:"Neue Sportart",k:11,s:{k:["11"]}},{id:"alle",n:"Für alle Stufen",k:1,s:{mob:["1","2","3","4","5"]}},{id:"arm",n:"Arm/Hand angepasst",k:1,s:{e:["Arm/Hand angepasst"]}},{id:"gut",n:"Hat gut geklappt",k:1,s:{e:["Lief gut"]}},{id:"neu",n:"Neu im Lexikon",k:1,s:{e:["NEU"]}},{id:"pass",n:"Fahr-Pass",k:12,s:{e:["Fahr-Pass"]}}];
+Object.assign(TIC,{reak:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',gesch:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12h.01"/>',gleich:'<path d="M12 4v16M6 20h12M4 8h16M4 8l-2 6h4zM20 8l-2 6h4z"/>',paar:'<circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 20c0-3 3-5 6-5s6 2 6 5M14 15c3-1 8 1 8 5"/>',musik:'<path d="M9 18V5l10-2v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>',kreis:'<circle cx="12" cy="12" r="8" stroke-dasharray="3 3"/>',ballon:'<path d="M12 3a6 7 0 0 1 0 14a6 7 0 0 1 0-14zM12 17v1l-1 1 2 1-1 1"/>',mittel:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5h4"/>',idee:'<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>'});
+TILES.push({id:"reak",n:"Reaktion schulen",k:1,s:{z:["Reaktion"]}},{id:"gesch",n:"Geschick und Kontrolle",k:1,s:{z:["Geschick","Kontrolle"]}},{id:"gleich",n:"Gleichgewicht und Beweglichkeit",k:1,s:{z:["Gleichgewicht","Beweglichkeit"]}},{id:"paar",n:"Zu zweit",k:1,s:{f:["Paare"]}},{id:"musik",n:"Mit Musik",k:1,s:{f:["Musik"]}},{id:"kreis",n:"Im Kreis",k:1,s:{f:["Kreis"]}},{id:"ballon",n:"Mit Luftballon",k:1,mm:"eins",s:{mat:["Luftballon"]}},{id:"mittel",n:"Mittlere Dauer",k:1,s:{d:["mittel"]}},{id:"idee",n:"Offene Ideen",k:10,s:{e:["Offene Ideen"]}});
+var TMORE=false;
+function tic(p){return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">'+p+'</svg>'}
+try{AG=JSON.parse(localStorage.getItem("rk-gruppe")||"null")}catch(e){AG=null}
+function actG(){if(!AG)return null;var l=AG.s==="my"?MYG:SHG;for(var i=0;i<l.length;i++)if(l[i].id===AG.id)return l[i];return null}
+function setAG(s,id){AG=(!s||(AG&&AG.s===s&&AG.id===id))?null:{s:s,id:id};try{localStorage.setItem("rk-gruppe",JSON.stringify(AG))}catch(e){}
+  var g=actG();if(g){SB.mob=(g.mob||[]).slice();SB.mat=(g.mat||[]).slice();SB.grp=g.grp||"mittel";SB.plan=null;GEN.mob=(g.mob||[]).slice();GEN.mat=(g.mat||[]).slice();GEN.ai=null}
+  WAHL=null;GED=null;renderStart()}
+function gSum(g){var m=g.mob||[],n=(g.mat||[]).length;return (m.length?mobRange(m):"alle Stufen")+" · "+(GRPK[g.grp]||GRPK.mittel)+" · "+(n?n+(n===1?" Material":" Materialien"):"Material nicht eingeschränkt")}
+function tileSel(t){var s={typ:[],mob:[],k:[],z:[],f:[],mat:[],d:[],e:[]},g=actG(),mm="eins";
+  if(g){s.mob=(g.mob||[]).map(String);if((g.mat||[]).length){s.mat=g.mat.slice();mm="habe"}}
+  for(var k in t.s)s[k]=t.s[k].slice();if(t.s.mat)mm=t.mm||"habe";return{s:s,mm:mm}}
+function tileCount(t){var o=tileSel(t),a=sel,b=matMode,c=mobMode,q=$("q").value;sel=o.s;matMode=o.mm;mobMode="alle";$("q").value="";var n=G.filter(match).length;sel=a;matMode=b;mobMode=c;$("q").value=q;return n}
+function tileGo(id){if(id==="wahl"){wahlMix();renderStart();return}var t=TILES.filter(function(x){return x.id===id})[0];if(!t)return;var o=tileSel(t);sel=o.s;matMode=o.mm;mobMode="alle";pick=null;$("q").value="";if(id==="zufall"){var pl=G.filter(function(g){return !isUeb(g)&&g.status!=="idee"&&match(g)});if(pl.length)pick=pl[Math.floor(Math.random()*pl.length)]}buildFilters();setView("lex")}
+function wahlMix(){var a=actG(),p=G.filter(function(g){if(isUeb(g)||g.status==="idee")return false;if(a&&a.mob)for(var i=0;i<a.mob.length;i++)if(g.mobs.indexOf(+a.mob[i])<0)return false;return true});WAHL=[];while(WAHL.length<3&&p.length)WAHL.push(p.splice(Math.floor(Math.random()*p.length),1)[0].id)}
+function gedRead(){if(!GED)return;var a=$("g-n"),b=$("g-note");if(a)GED.d.name=a.value.trim();if(b)GED.d.note=b.value.trim()}
+function gedHTML(){var d=GED.d,h='<div class="form" style="margin-top:10px"><h2>'+(GED.id?"Gruppe bearbeiten":"Neue Gruppe")+'</h2>';
+  h+='<label for="g-n">Name<input id="g-n" type="text" maxlength="40" value="'+esc(d.name)+'" placeholder="Mi Hernals"></label>';
+  h+='<div class="fl">Mobilität <span class="hint">alle Stufen antippen, die in der Gruppe sind</span></div>'+chipRow("data-gem",["1","2","3","4","5"],function(o){return d.mob.indexOf(+o)>-1},function(o){return o+" "+mobName(o)});
+  h+='<div class="fl">Größe</div>'+chipRow("data-geg",["klein","mittel","gross"],function(o){return d.grp===o},function(o){return GRPK[o]});
+  h+='<div class="fl">Material in der Halle <span class="hint">nichts gewählt = nicht einschränken</span></div>'+chipRow("data-gemat",CFG.mats,function(o){return d.mat.indexOf(o)>-1});
+  h+='<label for="g-note">Notiz für Einspringende <span class="hint">keine Namen von Kindern</span><input id="g-note" type="text" maxlength="200" value="'+esc(d.note)+'" placeholder="Spielen am Ende gern Rollball"></label>';
+  h+='<div class="fl">Teilen <span class="hint">geteilte Gruppen sehen alle, die Zugriff auf die Seite haben</span></div><div class="chips"><button type="button" class="chip" id="g-teil" aria-pressed="'+!!d.teilen+'">Mit dem Team teilen</button></div>';
+  h+='<div class="rowb"><button type="button" class="btn" id="g-save">Speichern</button><button type="button" class="btn2" id="g-cancel">Abbrechen</button>'+(GED.id?'<button type="button" class="btn3" id="g-del">Gruppe löschen</button>':'')+'</div><p class="msg'+(GED.msg?' err':'')+'" role="status">'+esc(GED.msg||"")+'</p></div>';return h}
+async function gedSave(){gedRead();var d=GED.d;if(!d.name){GED.msg="Gib der Gruppe zuerst einen Namen.";renderStart();var n=$("g-n");if(n)n.focus();return}
+  if(!GDOC||!DB){GED.msg="Speichern geht gerade nicht. Lade die Seite neu.";renderStart();return}
+  var id=GED.id||("g"+Date.now().toString(36)),o={id:id,name:d.name,mob:d.mob.slice().sort(),grp:d.grp,mat:d.mat.slice(),note:d.note,teilen:!!d.teilen},old=MYG.slice(),ix=-1;
+  MYG.forEach(function(x,i){if(x.id===id)ix=i});if(ix>-1)MYG[ix]=o;else MYG.push(o);
+  try{await GDOC.set({list:MYG})}catch(e){MYG=old;GED.msg="Speichern hat nicht geklappt. Versuche es noch einmal.";renderStart();return}
+  GMSG="";var sd=DB.collection("gruppen").doc(ME+"_"+id);
+  try{if(o.teilen)await sd.set({name:o.name,mob:o.mob,grp:o.grp,mat:o.mat,note:o.note,von:ME,am:today()});else if(ix>-1&&old[ix].teilen)await sd.delete()}
+  catch(e){if(o.teilen){o.teilen=false;GDOC.set({list:MYG}).catch(function(){});GMSG="Gespeichert. Teilen hat nicht geklappt. Dafür fehlen dir die Rechte."}}
+  GED=null;AG=null;setAG("my",id)}
+async function gedDel(){var id=GED.id,old=MYG.slice(),was=false;MYG=MYG.filter(function(x){if(x.id===id){was=!!x.teilen;return false}return true});
+  try{await GDOC.set({list:MYG})}catch(e){MYG=old;GED.msg="Löschen hat nicht geklappt.";renderStart();return}
+  if(was)DB.collection("gruppen").doc(ME+"_"+id).delete().catch(function(){});
+  GED=null;setAG(null)}
+function renderStart(){
+  var a=actG(),h='<p class="sh" style="margin-top:0">Meine Gruppen</p>';
+  if(!DB||!ME)h+='<p class="msg">'+(STATE==="laden"?"Wird geladen …":"Gruppen gibt es nur, wenn du in claude.ai angemeldet bist.")+'</p>';
+  else{h+='<div class="chips">'+MYG.map(function(g){return '<button type="button" class="chip" data-ag="my|'+esc(g.id)+'" aria-pressed="'+(a===g)+'">'+esc(g.name)+(g.teilen?' · geteilt':'')+'</button>'}).join("")+'<button type="button" class="chip" id="g-new">+ Gruppe</button></div>';
+    if(!MYG.length&&!GED)h+='<p class="hint" style="margin:6px 0 0">Lege deine erste Gruppe an. Dann stellt ein Tipper Mobilität, Größe und Material ein.</p>';
+    if(SHG.length)h+='<p class="sh">Vom Team geteilt</p><div class="chips">'+SHG.map(function(g){return '<button type="button" class="chip kc" style="'+kst(10)+'" data-ag="sh|'+esc(g.id)+'" aria-pressed="'+(a===g)+'">'+esc(g.name)+' · von <span class="nm" data-uid="'+esc(g.von||"")+'">jemand</span></button>'}).join("")+'</div>'}
+  if(GED)h+=gedHTML();
+  else if(a)h+='<div class="panel" style="margin-top:10px;gap:6px"><b>'+esc(a.name)+'</b><span class="meta">'+esc(gSum(a))+'</span>'+(a.note?'<span>'+esc(a.note)+'</span>':'')+'<div class="rowb">'+(AG.s==="my"?'<button type="button" class="btn3" id="g-edit">Bearbeiten</button>':'<button type="button" class="btn3" id="g-copy">Als eigene Kopie übernehmen</button>')+'<button type="button" class="btn3" data-ag="'+AG.s+'|'+esc(a.id)+'">Abwählen</button></div></div>';
+  if(GMSG)h+='<p class="msg" role="status">'+esc(GMSG)+'</p>';
+  h+='<p class="sh">Was brauchst du gerade?'+(a?' <span class="hint">für '+esc(a.name)+'</span>':'')+'</p><div class="tiles">'+TILES.slice(0,10).map(function(t){return '<button type="button" class="tile" style="'+kstf(t.k)+'" data-tile="'+t.id+'">'+tic(TIC[t.id])+'<b>'+t.n+'</b><span>'+(t.id==="wahl"?"3 große Bilder":t.id==="zufall"?"ein Zufallstreffer":G.length?tileCount(t)+" passen":"")+'</span></button>'}).join("")+'</div>';
+  if(WAHL){var ws=WAHL.map(byId).filter(Boolean);h+='<p class="sh">Kinder wählen</p>'+(ws.length?'<div class="wk3">'+ws.map(function(g){return '<button type="button" class="wk" style="'+kst(g.k)+'" data-go="'+esc(g.id)+'"><b>'+esc(g.n)+'</b>'+(g.tf[0]?tafelSVG(g.tf[0].o,g.tf[0].mid):'')+'</button>'}).join("")+'</div>':'<p class="msg">Kein Spiel passt zu dieser Gruppe.</p>')+'<div class="rowb" style="margin-top:8px"><button type="button" class="btn2" id="w-mix">Neu mischen</button></div>'}
+  h+='<form class="search" id="s-form" style="margin-top:18px"><input id="sq" type="search" placeholder="Im ganzen Lexikon suchen" aria-label="Suche im Lexikon"><button class="btn2" type="submit">Suchen</button></form>';
+  $("s-out").innerHTML=h;fillNames();
+}
+/* ---------- Meins: Favoriten und zuletzt gespielt ---------- */
+var FAV=[],GESP={},MDOC=null;
+var STAR='<path d="M12 3L14.7 8.6L20.8 9.4L16.3 13.6L17.5 19.6L12 16.6L6.5 19.6L7.7 13.6L3.2 9.4L9.3 8.6Z"/>',CAL='<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/>',THUP='<path d="M7 11v9H4v-9zM7 11l4-7a2 2 0 0 1 3 2l-1 4h5a2 2 0 0 1 2 2l-2 7H7"/>',THDN='<g transform="rotate(180 12 12)">'+THUP+'</g>';
+function meinSet(d){if(!d)return;if(Array.isArray(d.fav))FAV=d.fav.filter(function(x){return typeof x==="string"});if(d.gesp&&typeof d.gesp==="object"){GESP={};for(var k in d.gesp)if(Array.isArray(d.gesp[k]))GESP[k]=d.gesp[k].filter(function(x){return typeof x==="string"})}}
+function loadMein(){try{meinSet(JSON.parse(localStorage.getItem("rk-mein")||"null"))}catch(e){}}
+function saveMein(){var d={fav:FAV,gesp:GESP,am:today()};try{localStorage.setItem("rk-mein",JSON.stringify(d))}catch(e){}if(MDOC)MDOC.set(d).catch(function(){})}
+function isFav(id){return FAV.indexOf(id)>-1}
+function lastPlay(id){var a=GESP[id];if(!a||!a.length)return "";return a.slice().sort()[a.length-1]}
+function daysSince(id){var l=lastPlay(id);if(!l)return Infinity;var d=Math.round((Date.parse(today())-Date.parse(l))/864e5);return isFinite(d)?Math.max(0,d):Infinity}
+function agoText(n){if(n<=0)return "heute";if(n===1)return "gestern";if(n<14)return "vor "+n+" Tagen";if(n<60)return "vor "+Math.round(n/7)+" Wochen";return "vor "+Math.round(n/30)+" Monaten"}
+function playedToday(id){return (GESP[id]||[]).indexOf(today())>-1}
+function toggleGesp(id){var a=GESP[id]||[],t=today(),i=a.indexOf(t);if(i>-1)a.splice(i,1);else a.push(t);a.sort();if(a.length>30)a=a.slice(a.length-30);if(a.length)GESP[id]=a;else delete GESP[id];saveMein();renderList()}
+function toggleFav(id,btn){var i=FAV.indexOf(id);if(i>-1)FAV.splice(i,1);else FAV.push(id);saveMein();if(sel.e.indexOf("Favoriten")>-1){renderList();return}if(btn){var on=isFav(id);btn.setAttribute("aria-pressed",on);btn.setAttribute("aria-label",on?"Favorit. Tippen zum Entfernen.":"Als Favorit merken");btn.title=on?"Favorit":"Als Favorit merken"}}
+function favBtn(g){var on=isFav(g.id);return '<button type="button" class="favb" data-fav="'+esc(g.id)+'" aria-pressed="'+on+'" aria-label="'+(on?"Favorit. Tippen zum Entfernen.":"Als Favorit merken")+'" title="'+(on?"Favorit":"Als Favorit merken")+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+STAR+'</svg></button>'}
+function votes(id){var u=0,d=0;(NOTES[id]||[]).forEach(function(n){if(/^Lief gut/.test(n.text||""))u++;else if(/^War zäh/.test(n.text||""))d++});return{u:u,d:d}}
+function myMarks(g){var h="",n=(GESP[g.id]||[]).length,v=votes(g.id);
+  if(n)h+='<span class="mk gp" title="Zuletzt gespielt">'+tic(CAL)+esc(agoText(daysSince(g.id)))+' · '+n+' mal</span>';
+  else if(sel.e.indexOf("Lange nicht gespielt")>-1)h+='<span class="mk">'+tic(CAL)+'noch nie gespielt</span>';
+  if(v.u)h+='<span class="mk up" title="Lief gut">'+tic(THUP)+v.u+'</span>';
+  if(v.d)h+='<span class="mk dn" title="War zäh">'+tic(THDN)+v.d+'</span>';
+  return h}
+function similar(g){var out=[];G.forEach(function(x){if(x.id===g.id||x.status==="idee"||isUeb(x)!==isUeb(g)||g.bau.indexOf(x.id)>-1||x.bau.indexOf(g.id)>-1)return;var s=0;
+    g.z.forEach(function(z){if(x.z.indexOf(z)>-1)s+=2});g.f.forEach(function(f){if(x.f.indexOf(f)>-1)s+=2});
+    if(String(x.k)===String(g.k))s+=2;if(x.d===g.d)s+=1;
+    g.mobs.forEach(function(m){if(x.mobs.indexOf(m)>-1)s+=.3});
+    if(s>=4)out.push({g:x,s:s})});
+  out.sort(function(a,b){return (b.s-a.s)||a.g.n.localeCompare(b.g.n,"de")});return out.slice(0,3).map(function(o){return o.g})}
+function simHTML(g){var s=similar(g);if(!s.length)return "";return '<div class="sec"><h4>Passt auch dazu</h4><div class="rowb">'+s.map(function(b){return '<button type="button" class="btn3" data-go="'+esc(b.id)+'">'+esc(b.n)+'</button>'}).join("")+'</div></div>'}
+function vote(id,v,btn){if(!DB)return;var a=actG(),tx=(v==="gut"?"Lief gut":"War zäh")+(a?" ("+a.name+")":"");btn.disabled=true;DB.collection("notizen").add({spiel:id,text:tx,von:ME||"",am:today()}).catch(function(){btn.disabled=false;btn.textContent="Speichern hat nicht geklappt"})}
+/* ---------- Schrift und große Tafel ---------- */
+(function(){var on=false;try{on=localStorage.getItem("rk-schrift")==="gross"}catch(e){}
+  function set(v){on=v;if(v)document.documentElement.setAttribute("data-fs","gross");else document.documentElement.removeAttribute("data-fs");var b=$("fontbtn");if(b){b.setAttribute("aria-pressed",v);b.setAttribute("aria-label",v?"Große Schrift ist an. Tippen für normal.":"Große Schrift einschalten")}try{localStorage.setItem("rk-schrift",v?"gross":"normal")}catch(e){}}
+  set(on);document.addEventListener("click",function(ev){if(ev.target.closest&&ev.target.closest("#fontbtn"))set(!on)})})();
+function zoomClose(){var z=$("zoomov");if(z)z.remove()}
+document.addEventListener("click",function(ev){var t=ev.target;if(!t.closest)return;
+  if(t.closest("#zoomov")){zoomClose();return}
+  var sv=t.closest(".card .tafel svg");if(!sv||sv.closest(".leg"))return;
+  var o=document.createElement("div");o.id="zoomov";o.className="zoomov";o.setAttribute("role","dialog");o.setAttribute("aria-label","Taktiktafel groß");o.tabIndex=-1;
+  o.appendChild(sv.cloneNode(true));var s=document.createElement("span");s.textContent="Tippen zum Schließen";o.appendChild(s);document.body.appendChild(o);try{o.focus()}catch(e){}});
+document.addEventListener("keydown",function(ev){if(ev.key==="Escape")zoomClose()});
+/* ---------- Ansichten ---------- */
+function setView(v){view=v;["start","lex","bauen","stunde","heute","pass"].forEach(function(x){$("v-"+x).hidden=x!==v});document.querySelectorAll(".nav button").forEach(function(b){if(b.dataset.v===v||(v==="stunde"&&b.dataset.v==="bauen"&&!b.closest(".subnav")))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});try{if(location.hash!=="#"+v)history.replaceState(null,"","#"+v)}catch(e){}renderAll()}
+function renderAll(){$("hcnt").textContent=EIN.length;if(view==="start"){if(GED)gedRead();renderStart()}else if(view==="lex")renderList();else if(view==="bauen")renderBau();else if(view==="stunde")renderStunde();else if(view==="heute")renderHeute();else renderPass();$("newbtn").hidden=!(DB&&CANW!==false);$("appx").hidden=!(DLS&&G.length)}
+function goTo(id){pick=null;openIds[id]=1;$("q").value="";for(var k in sel)sel[k]=[];buildFilters();setView("lex");setTimeout(function(){var c=document.querySelector('.card[data-id="'+id+'"]');if(c)c.scrollIntoView({behavior:"smooth",block:"start"})},60)}
+/* ---------- Events ---------- */
+document.addEventListener("click",function(e){
+  var t=e.target,b;
+  if((b=t.closest(".nav button"))){setView(b.dataset.v);return}
+  if((b=t.closest("[data-fav]"))){e.preventDefault();toggleFav(b.dataset.fav,b);return}
+  if((b=t.closest("[data-gesp]"))){toggleGesp(b.dataset.gesp);return}
+  if((b=t.closest("[data-vote]"))){var vq=b.dataset.vote.split("|");vote(vq[0],vq[1],b);return}
+  if((b=t.closest("[data-ag]"))){var ga=b.dataset.ag.split("|");GMSG="";setAG(ga[0],ga[1]);return}
+  if(t.id==="g-new"){GMSG="";GED={id:null,d:{name:"",mob:[],grp:"mittel",mat:[],note:"",teilen:false},msg:""};renderStart();return}
+  if(t.id==="g-edit"||t.id==="g-copy"){var ge=actG();if(ge){GED={id:t.id==="g-edit"?ge.id:null,d:{name:ge.name||"",mob:(ge.mob||[]).map(Number),grp:ge.grp||"mittel",mat:(ge.mat||[]).slice(),note:ge.note||"",teilen:t.id==="g-edit"&&!!ge.teilen},msg:""};renderStart()}return}
+  if(GED&&(b=t.closest("[data-gem]"))){gedRead();sbTog(GED.d.mob,+b.dataset.gem);renderStart();return}
+  if(GED&&(b=t.closest("[data-geg]"))){gedRead();GED.d.grp=b.dataset.geg;renderStart();return}
+  if(GED&&(b=t.closest("[data-gemat]"))){gedRead();sbTog(GED.d.mat,b.dataset.gemat);renderStart();return}
+  if(GED&&t.id==="g-teil"){gedRead();GED.d.teilen=!GED.d.teilen;renderStart();return}
+  if(GED&&t.id==="g-save"){gedSave();return}
+  if(t.id==="g-cancel"){GED=null;renderStart();return}
+  if(GED&&t.id==="g-del"){if(t.dataset.sure!=="1"){t.dataset.sure="1";t.textContent="Wirklich löschen?";return}gedDel();return}
+  if((b=t.closest("[data-tile]"))){tileGo(b.dataset.tile);return}
+  if(t.id==="w-mix"){wahlMix();renderStart();return}
+  if(t.id==="t-more"){TMORE=!TMORE;renderStart();return}
+  if((b=t.closest("[data-mo]"))){mobMode=b.dataset.mo;buildFilters();renderList();return}
+  if((b=t.closest("[data-mm]"))){matMode=b.dataset.mm;buildFilters();renderList();return}
+  if(t.closest("#more")){showF=!showF;buildFilters();return}
+  if((b=t.closest("#filters .chip,#quick .chip"))){var s=sel[b.dataset.g],i=s.indexOf(b.dataset.o);if(i>-1)s.splice(i,1);else s.push(b.dataset.o);pick=null;buildFilters();renderList();return}
+  if((b=t.closest("[data-go]"))){e.preventDefault();goTo(b.dataset.go);return}
+  if((b=t.closest("[data-heute]"))){e.preventDefault();toggleHeute(b.dataset.heute);return}
+  if((b=t.closest("[data-karte]"))){var g=byId(b.dataset.karte);if(g)saveFile("karte-"+g.id+".html",fileDoc(g.n,cardFile(g)));return}
+  if((b=t.closest("[data-edit]"))){openEditor(b.dataset.edit);return}
+  if((b=t.closest("[data-build]"))){GEN.u=[b.dataset.build];GEN.ai=null;setView("bauen");return}
+  if((b=t.closest("[data-del]"))){var row=b.closest("[data-delrow]"),id=row.dataset.delrow;
+    if(b.dataset.del==="ask"){row.innerHTML='<span class="msg">Wirklich löschen?</span><button type="button" class="btn3" data-del="yes">Ja, löschen</button><button type="button" class="btn3" data-del="no">Nein</button>';return}
+    if(b.dataset.del==="no"){renderList();return}
+    if(b.dataset.del==="yes"&&DB)DB.collection("spiele").doc(id).delete().catch(function(){row.innerHTML='<span class="msg err">Löschen hat nicht geklappt.</span>'});return}
+  if((b=t.closest("[data-ndel]"))){if(DB)DB.collection("notizen").doc(b.dataset.ndel).delete().catch(function(){});return}
+  if((b=t.closest("[data-rah]"))){GEN.r=b.dataset.rah;GEN.ai=null;renderBau();return}
+  if((b=t.closest("[data-gm]"))){var gv=+b.dataset.gm,gi=GEN.mob.indexOf(gv);if(gi>-1)GEN.mob.splice(gi,1);else GEN.mob.push(gv);GEN.ai=null;renderBau();return}
+  if((b=t.closest("[data-gmat]"))){var gm=b.dataset.gmat,gj=GEN.mat.indexOf(gm);if(gj>-1)GEN.mat.splice(gj,1);else GEN.mat.push(gm);GEN.ai=null;renderBau();return}
+  if((b=t.closest("[data-gl]"))){GEN.lvl=+b.dataset.gl;GEN.ai=null;renderBau();return}
+  if((b=t.closest("[data-gd]"))){GEN.d=b.dataset.gd;GEN.ai=null;renderBau();return}
+  if((b=t.closest("[data-gu]"))){var gu=b.dataset.gu,gk=GEN.u.indexOf(gu);if(gk>-1)GEN.u.splice(gk,1);else{GEN.u.push(gu);if(GEN.u.length>3)GEN.u.shift()}GEN.ai=null;renderBau();return}
+  if(t.id==="b-rnd"){var pl=genPool();if(pl.length){var nn=1+Math.floor(Math.random()*Math.min(2,pl.length));GEN.u=[];while(GEN.u.length<nn){var cand=pl[Math.floor(Math.random()*pl.length)].id;if(GEN.u.indexOf(cand)<0)GEN.u.push(cand)}GEN.r=CFG.rahmen[Math.floor(Math.random()*CFG.rahmen.length)].id;GEN.ai=null;renderBau()}return}
+  if(t.id==="g-ai"){genAI();return}
+  if((b=t.closest("[data-sbd]"))){SB.dur=+b.dataset.sbd;if(SB.plan){var sp=SPLIT[SB.dur];SB.plan.forEach(function(r,i){r.min=sp[i]})}renderStunde();return}
+  if((b=t.closest("[data-sbm]"))){sbTog(SB.mob,+b.dataset.sbm);SB.plan=null;SB.msg="";renderStunde();return}
+  if((b=t.closest("[data-sbz]"))){sbTog(SB.z,b.dataset.sbz);SB.plan=null;SB.msg="";renderStunde();return}
+  if((b=t.closest("[data-sbmat]"))){sbTog(SB.mat,b.dataset.sbmat);SB.plan=null;SB.msg="";renderStunde();return}
+  if((b=t.closest("[data-sbg]"))){SB.grp=b.dataset.sbg;SB.plan=null;SB.msg="";renderStunde();return}
+  if(t.id==="sb-make"){sbMake();SB.msg="";renderStunde();return}
+  if((b=t.closest("[data-sbalt]"))){var sa=b.dataset.sbalt.split("|"),row=SB.plan[+sa[0]],ai=+sa[1],tmpa=row.ids[0];row.ids[0]=row.ids[ai];row.ids[ai]=tmpa;SB.msg="";renderSbOut();return}
+  if(t.id==="sb-heute"){EIN=sbIds();saveEin();SB.msg="Übernommen. Du findest die Stunde unter „Für heute“ mit Packliste.";$("hcnt").textContent=EIN.length;renderSbOut();return}
+  if(t.id==="sb-file"){var sit=sbIds().map(byId);saveFile("stunde-"+today()+".html",fileDoc("Stunde "+dmy(today()),sit.map(cardFile).join("")),$("sb-msg"));return}
+  if((b=t.closest("[data-sbload]"))){var it2=SB.saved[+b.dataset.sbload];if(it2){SB.dur=it2.dur;SB.plan=JSON.parse(JSON.stringify(it2.plan));SB.msg="Geöffnet: „"+it2.name+"“.";renderStunde();$("sb-out").scrollIntoView({behavior:"smooth",block:"start"})}return}
+  if((b=t.closest("[data-sbdel]"))){var di=+b.dataset.sbdel;if(b.dataset.sure!=="1"){b.dataset.sure="1";b.textContent="Wirklich löschen?";return}SB.saved.splice(di,1);sbPersist().catch(function(){});renderSbOut();return}
+  if(t.id==="b-save"){saveBau();return}
+  if((b=t.closest("[data-eblvl]"))){var eb=b.closest("[data-eb]");EB[eb.dataset.eb].lvl=+b.dataset.eblvl;eb.outerHTML=einbauHTML(byId(eb.dataset.eb));return}
+  if((b=t.closest("[data-ebsave]"))){einbauSave(b.dataset.ebsave,b);return}
+  if((b=t.closest("[data-hmv]"))){var q=b.dataset.hmv.split("|"),a=+q[0],z=a+(+q[1]);if(z>=0&&z<EIN.length){var tmp=EIN[a];EIN[a]=EIN[z];EIN[z]=tmp;saveEin();renderHeute()}return}
+  if(t.id==="h-clr"){EIN=[];saveEin();renderAll();return}
+  if(t.id==="h-save"){var it=EIN.map(byId).filter(Boolean);saveFile("training-"+today()+".html",fileDoc("Training "+dmy(today()),it.map(cardFile).join("")),$("h-msg"));return}
+  if(t.id==="appdata"){var ad={stand:today(),spiele:Object.keys(RAW).map(function(id){return Object.assign({id:id},RAW[id])})};DLS.save({filename:"daten.json",data:new Blob([JSON.stringify(ad)],{type:"application/json"})}).then(function(r){$("appmsg").textContent=r==="saved"?"Gespeichert. Ersetze damit die Datei daten.json im App-Ordner und lade ihn neu hoch.":""}).catch(function(){$("appmsg").textContent="Speichern hat nicht geklappt."});return}
+  if(t.id==="p-save"){saveFile("fahr-pass.html",passFile(),$("p-msg"));return}
+  if(t.id==="newbtn"){openEditor(null);return}
+  if(t.id==="rnd"){var pool=G.filter(match);if(!pool.length)pool=G;if(pool.length){pick=pool[Math.floor(Math.random()*pool.length)];renderList()}return}
+  if(t.id==="reset"){for(var k in sel)sel[k]=[];$("q").value="";pick=null;buildFilters();renderList();return}
+  if(t.id==="all"){openAll=!openAll;if(!openAll){openIds={};pick=null}renderList();return}
+  if(!ED)return;
+  if(t.id==="e-cancel"){ED=null;editing=null;$("editor").innerHTML="";return}
+  if((b=t.closest("[data-ek]"))){readEditor();var key=b.dataset.ek,o=b.dataset.eo;if(key==="d")ED.d.d=o;else{var arr=ED.d[key]=ED.d[key]||[],j=arr.indexOf(o);if(j>-1)arr.splice(j,1);else arr.push(o)}drawEditor();return}
+  if((b=t.closest("[data-emob]"))){readEditor();var mv2=+b.dataset.emob,mi=ED.d.mob.indexOf(mv2);if(mi>-1)ED.d.mob.splice(mi,1);else{ED.d.mob.push(mv2);ED.d.mob.sort()}drawEditor();return}
+  if((b=t.closest("[data-eflag]"))){readEditor();var f=b.dataset.eflag;ED.d[f]=ED.d[f]?0:1;drawEditor();return}
+  if((b=t.closest("[data-ebau]"))){readEditor();var bi=ED.d.bau.indexOf(b.dataset.ebau);if(bi>-1)ED.d.bau.splice(bi,1);else ED.d.bau.push(b.dataset.ebau);drawEditor();return}
+  if((b=t.closest("[data-sadd]"))){readEditor();var hd=b.dataset.sadd;ED.d.sec.push({h:hd,v:false,p:[hd==="Anpassen"?"Einfacher: … Fordernder: …":hd==="Stufen"?"Stufe 1: … Stufe 2: … Stufe 3: …":""]});drawEditor();return}
+  if((b=t.closest("[data-sdel]"))){readEditor();ED.d.sec.splice(+b.dataset.sdel,1);drawEditor();return}
+  if((b=t.closest("[data-smv]"))){readEditor();var mv=b.dataset.smv.split("|"),x1=+mv[0],x2=x1+(+mv[1]),S=ED.d.sec;if(x2>=0&&x2<S.length){var tm=S[x1];S[x1]=S[x2];S[x2]=tm;drawEditor()}return}
+  if((b=t.closest("[data-tb]"))){readEditor();var v=b.dataset.tb;if(v==="neu"){ED.d.tf.push({t:"",o:[]});ED.board=ED.d.tf.length-1}else if(v==="del"){ED.d.tf.splice(ED.board,1);ED.board=Math.max(0,ED.board-1)}else ED.board=+v;ED.pts=[];drawTed();return}
+  if((b=t.closest("[data-tool]"))){readEditor();ED.tool=b.dataset.tool;ED.pts=[];drawTed();return}
+  if(t.id==="t-pend"){if(ED.pts.length>=4)ED.d.tf[ED.board].o.push(["p",ED.pts.slice()]);ED.pts=[];drawTed();return}
+  if(t.id==="t-undo"){if(ED.pts.length)ED.pts=[];else ED.d.tf[ED.board].o.pop();drawTed();return}
+  if(t.id==="t-mid"){var bb=ED.d.tf[ED.board];bb.mid=bb.mid===false?true:false;drawTed();return}
+  if(t.id==="t-clr"){ED.d.tf[ED.board].o=[];ED.pts=[];drawTed();return}
+  if(t.closest("#ted svg")){tedClick(e);return}
+});
+document.addEventListener("toggle",function(e){var d=e.target;if(!d.classList||!d.classList.contains("card"))return;var id=d.dataset.id;if(d.open){if(!openIds[id]){openIds[id]=1;var g=byId(id);if(g&&!d.querySelector(".det")){d.insertAdjacentHTML("beforeend",detail(g));fillNames()}}}else delete openIds[id]},true);
+document.addEventListener("submit",function(e){
+  var f=e.target;e.preventDefault();
+  if(f.id==="edf"){saveEditor();return}
+  if(f.id==="s-form"){$("q").value=$("sq").value;pick=null;setView("lex");return}
+  if(f.id==="sb-form"){var nm=$("sb-name").value.trim();if(!nm){SB.msg="Gib der Stunde zuerst einen Namen.";renderSbOut();$("sb-name").focus();return}
+    SB.saved.unshift({name:nm,am:today(),dur:SB.dur,plan:JSON.parse(JSON.stringify(SB.plan))});SB.msg="Wird gespeichert …";renderSbOut();
+    sbPersist().then(function(){SB.msg="Gespeichert als „"+nm+"“.";renderSbOut()}).catch(function(){SB.saved.shift();SB.msg="Speichern hat nicht geklappt. Versuche es noch einmal.";renderSbOut()});return}
+  if(f.dataset.note&&DB){var inp=f.querySelector("input"),tx=inp.value.trim();if(!tx)return;inp.disabled=true;
+    DB.collection("notizen").add({spiel:f.dataset.note,text:tx,von:ME||"",am:today()}).then(function(){inp.value="";inp.disabled=false}).catch(function(){inp.disabled=false;inp.placeholder="Speichern hat nicht geklappt"})}
+});
+document.addEventListener("change",function(e){var t=e.target,eb=t.closest&&t.closest("[data-eb]");if(eb&&t.dataset.ebsel){var st=EB[eb.dataset.eb];if(t.dataset.ebsel==="u")st.u=t.value;else st.slot=+t.value;eb.outerHTML=einbauHTML(byId(eb.dataset.eb))}});
+$("q").addEventListener("input",function(){pick=null;renderList()});
+window.addEventListener("hashchange",function(){var v=location.hash.slice(1);if(["start","lex","bauen","stunde","heute"].indexOf(v)>-1&&v!==view)setView(v)});
+/* ---------- Start ---------- */
+loadEin();loadMein();buildFilters();
+(function(){var v=location.hash.slice(1);setView(["start","lex","bauen","stunde","heute"].indexOf(v)>-1?v:"start")})();
+(async function(){
+  try{U=await claude.use("user")}catch(e){U=null}
+  if(U){try{ME=await U.id()}catch(e){}try{CANW=await U.can("data.write")}catch(e){}}
+  try{DLS=await claude.use("downloads")}catch(e){DLS=null}
+  try{SAMPLE=await claude.use("sample")}catch(e){SAMPLE=null}
+  var db=null;try{db=(window.claude&&claude.use)?await claude.use("db"):null}catch(e){db=null}
+  if(!db){STATE="aus";renderAll();return}
+  DB=db;
+  if(ME){GDOC=db.collection("data/users/"+ME).doc("gruppen");GDOC.get().then(function(s){var d=s&&s.data&&s.data();if(d&&Array.isArray(d.list))MYG=d.list;if(view==="start")renderAll()}).catch(function(){})}
+  db.collection("gruppen").onSnapshot(function(snap){SHG=snap.docs.map(function(d){var x=d.data();x.id=d.id;return x}).filter(function(x){return x.von!==ME});if(view==="start")renderAll()},function(){});
+  if(ME){SDOC=db.collection("data/users/"+ME).doc("stunden");SDOC.get().then(function(s){var d=s&&s.data&&s.data();if(d&&Array.isArray(d.list))SB.saved=d.list;if(view==="stunde")renderSbOut()}).catch(function(){})}
+  if(ME){MDOC=db.collection("data/users/"+ME).doc("mein");MDOC.get().then(function(s){var d=s&&s.data&&s.data();if(d&&(d.fav||d.gesp)){meinSet(d);try{localStorage.setItem("rk-mein",JSON.stringify({fav:FAV,gesp:GESP}))}catch(e){}renderAll()}else if(FAV.length||Object.keys(GESP).length)saveMein()}).catch(function(){})}
+  if(ME){EDOC=db.collection("data/users/"+ME).doc("einheit");EDOC.get().then(function(s){var d=s&&s.data&&s.data();if(d&&Array.isArray(d.ids)&&d.ids.length){EIN=d.ids;try{localStorage.setItem("rk-heute",JSON.stringify(EIN))}catch(e){}renderAll()}else if(EIN.length)saveEin()}).catch(function(){})}
+  db.doc("config/lexikon").onSnapshot(function(s){var d=s&&s.data&&s.data();CFG=JSON.parse(JSON.stringify(DEF));if(d){["cats","ziele","formen","mats","rahmen","mobs"].forEach(function(k){if(d[k])CFG[k]=k==="cats"?Object.assign(CFG.cats,d[k]):d[k]})}G.forEach(prep);buildFilters();renderAll()},function(){});
+  db.collection("notizen").onSnapshot(function(snap){NOTES={};snap.docs.forEach(function(d){var x=d.data();x.id=d.id;(NOTES[x.spiel]=NOTES[x.spiel]||[]).push(x)});for(var k in NOTES)NOTES[k].sort(function(a,b){return String(b.am).localeCompare(String(a.am))});if(view==="lex")renderList()},function(){});
+  db.collection("spiele").onSnapshot(function(snap){
+    RAW={};G=snap.docs.map(function(d){var raw=d.data();RAW[d.id]=JSON.parse(JSON.stringify(raw));var x=JSON.parse(JSON.stringify(raw));x.id=d.id;prep(x);return x});
+    G.sort(function(a,b){return (+a.k-+b.k)||((a.o==null?9999:a.o)-(b.o==null?9999:b.o))||a.n.localeCompare(b.n,"de")});
+    if(pick)pick=byId(pick.id);
+    STATE=G.length?"ok":"leer";renderAll();
+  },function(){STATE="fehler";renderAll()});
+})();
+</script>
+
+</body></html>
