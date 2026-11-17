@@ -210,22 +210,21 @@
     ".rk-tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;background:var(--accent-soft,#E2E8E9);margin-left:6px;vertical-align:1px}" +
     ".rk-tag.off{background:#FDE0DE;color:#8E1B1B}" +
     "#rkacct{float:right;margin:4px 6px 0 0;display:inline-flex;gap:5px;align-items:center}" +
-    "#rk-off{position:fixed;left:50%;transform:translateX(-50%);top:calc(8px + env(safe-area-inset-top,0px));z-index:800;background:var(--warn-s,#FFF1D6);color:var(--fg);border:1.5px solid var(--warn,#B26A00);border-radius:99px;padding:4px 12px;font-size:13px}";
+    "#rkacct .rk-offi{display:none;width:16px;height:16px;color:var(--warn,#B26A00)}#rkacct.off .rk-offi{display:inline}";
 
   function injectUI() {
     var st = document.createElement("style"); st.textContent = CSS; document.head.appendChild(st);
     var g = document.createElement("div"); g.id = "rk-gate"; g.innerHTML = '<div class="rk-box"><h2>Rolli-Kids</h2><p>Lädt …</p></div>'; document.body.appendChild(g);
     var p = document.createElement("div"); p.id = "rk-panel"; p.hidden = true; document.body.appendChild(p);
     p.addEventListener("click", function (e) { if (e.target === p) p.hidden = true; });
-    var off = document.createElement("div"); off.id = "rk-off"; off.textContent = "Offline: du siehst den letzten Stand"; off.hidden = !navigator.onLine; document.body.appendChild(off);
-    window.addEventListener("online", function () { off.hidden = true; });
-    window.addEventListener("offline", function () { off.hidden = false; });
     var hb = $("helpbtn");
     if (hb) {
       var b = document.createElement("button"); b.type = "button"; b.className = "btn3"; b.id = "rkacct";
-      b.innerHTML = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><span id="rkacct-n">Konto</span>';
+      b.innerHTML = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><span id="rkacct-n">Konto</span><svg class="rk-offi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .5-8A6 6 0 0 0 6 9a4.5 4.5 0 0 0 1 9z"/><path d="M3 3l18 18"/></svg>';
       hb.parentNode.insertBefore(b, hb);
       b.addEventListener("click", openPanel);
+      var setOff = function () { var o = !navigator.onLine; b.classList.toggle("off", o); b.title = o ? "Offline: du siehst den letzten gespeicherten Stand" : ""; };
+      window.addEventListener("online", setOff); window.addEventListener("offline", setOff); setOff();
     }
   }
 
