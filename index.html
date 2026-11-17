@@ -169,6 +169,13 @@ button:disabled{opacity:.5;cursor:default}
 .sbp{font-size:13px;font-weight:700;color:var(--kc);min-width:150px;font-variant-numeric:tabular-nums}
 .sbn{font:inherit;font-weight:700;color:var(--fg);background:none;border:0;padding:0;text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
 .sbs{display:grid;gap:6px}
+.abline{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;justify-content:space-between;background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:6px 10px;font-size:14px}
+.abt{font-family:var(--f-display);font-size:22px;font-weight:700}
+.abbar{display:flex;height:12px;border-radius:6px;overflow:hidden;gap:2px}.abbar i{background:var(--kc)}.abbar i.buf{background:var(--line)}
+.abk{background:var(--surface);border:2px solid var(--kc);border-radius:10px;padding:8px 10px;display:grid;gap:6px}
+.abh{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.abh .link{padding:0;font-size:13px;color:var(--kc);font-weight:700}
+.abg{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.abg .btn3{min-width:40px;font-size:18px;line-height:1;padding:6px 10px}
+.abs{margin:0;font-size:16px;font-style:italic}
 .sbs .hi{grid-template-columns:1fr auto}
 .sh{font-size:13px;font-weight:700;color:var(--muted);margin:14px 0 6px}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
@@ -221,7 +228,7 @@ button:disabled{opacity:.5;cursor:default}
     <button type="button" data-v="start"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg><span>Start</span></button>
     <button type="button" data-v="lex"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3zM5 17a3 3 0 0 1 3-3h11"/></svg><span>Lexikon</span></button>
     <button type="button" data-v="bauen"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/><path d="M16.5 4v7M13 7.5h7M4 16.5h7"/></svg><span>Bauen</span></button>
-    
+    <button type="button" data-v="abenteuer"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg><span>Abenteuer</span></button>
     <button type="button" data-v="heute"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="16" rx="2"/><path d="M9 5V3h6v2M9 11h6M9 15h6"/></svg><span>Für heute<span class="cnt" id="hcnt">0</span></span></button>
   </nav>
 
@@ -252,6 +259,13 @@ button:disabled{opacity:.5;cursor:default}
     <h2>Stunde bauen</h2>
     <p class="sub">Stell Dauer, Gruppe, Schwerpunkt und Material ein. Die Seite schlägt eine Stunde aus dem Lexikon vor, mit zwei Alternativen pro Teil. Tippe eine Alternative an, um sie einzutauschen. Dann übernimmst du die Stunde in „Für heute“.</p>
     <div class="panel"><div id="sb-in" style="display:grid;gap:14px"></div><div id="sb-out" style="display:grid;gap:10px"></div></div>
+  </section>
+
+  <section id="v-abenteuer" hidden>
+    <h2>Abenteuer</h2>
+    <p class="sub">Eine Stunde als Fantasie-Geschichte. Wähle Welt, Dauer und Gruppe. Die Seite setzt passende Spiele aus dem Lexikon ein und schreibt zu jedem Kapitel einen Satz. Den Rest erzählt ihr mit den Kindern selbst.</p>
+    <div class="helpbox"><b>ⓘ So geht Abenteuer</b><span>‹ › wechselt das Spiel in einem Kapitel.</span><span>✏️ ändert den Satz der Geschichte.</span><span>🔒 hält ein Kapitel fest. „Neu würfeln“ lässt es dann in Ruhe.</span><span>Tipp auf die Minuten ändert die Zeit.</span><span>„Welt wechseln“ behält die Spiele und tauscht nur die Geschichte.</span><span>„Meine Abenteuer“ siehst nur du.</span></div>
+    <div class="panel"><div id="ab-in" style="display:grid;gap:14px"></div><div id="ab-out" style="display:grid;gap:10px"></div></div>
   </section>
 
   <section id="v-heute" hidden>
@@ -443,7 +457,7 @@ function mk(p,t){return '<span class="mk"><svg class="ic" viewBox="0 0 24 24" ar
 function matIcon(m){var c=MATI[m];return (c&&(MATP[c]||(TIC&&TIC[c])))||MATP.box}
 function marks(g){var h=mk(TIC.kurz,DL[g.d]);if(!g.mats.length)h+=mk(TIC.ohne,"ohne Material");g.mats.forEach(function(m){h+=mk(matIcon(m),m)});return h}
 document.addEventListener("click",function(ev){var b=ev.target.closest&&ev.target.closest("[data-jump]");if(!b)return;var k=b.dataset.jump;sel.k=(sel.k.length===1&&sel.k[0]===k)?[]:[k];pick=null;buildFilters();renderList()});
-var TIPS=[['.nav button[data-v="start"]',"Schnelle Auswahl nach Situation"],['.nav button[data-v="lex"]',"Alle Spiele und Übungen"],['.nav button[data-v="bauen"]',"Spiel oder Stunde zusammenstellen"],['.subnav button[data-v="bauen"]',"Neues Spiel aus Übungen"],['.nav button[data-v="stunde"]',"Stunde aus dem Lexikon vorschlagen"],['.nav button[data-v="heute"]',"Deine Auswahl fürs nächste Training"],['#rnd',"Zeigt ein zufälliges Spiel"],['#newbtn',"Eigenes Spiel oder Übung anlegen"],['#more',"Filter: Mobilität, Kategorie, Material, Dauer"],['#quick [data-o="kurz"]',"bis 5 Minuten"],['#all',"Zeigt alle Karten mit allen Details"],['#reset',"Zeigt wieder alle Einträge"],['.det [data-heute]',"Merkt den Eintrag fürs nächste Training"],['[data-karte]',"Speichert die Karte zum Ausdrucken"],['[data-edit]',"Text, Tafel und Stichworte ändern"],['[data-build]',"Öffnet „Spiel bauen“ mit dieser Übung"],['#h-save',"Alle Karten zum Ausdrucken"],['#h-clr',"Leert deine Auswahl"],['[data-gesp]',"Merkt das Datum. Nur du siehst es."],['[data-vote]',"Zählt als Daumen auf der Karte"],['#fontbtn',"Schrift größer oder normal"],['#quick [data-o="Favoriten"]',"Nur Einträge mit deinem Stern"],['#quick [data-o="Lange nicht gespielt"]',"Über 4 Wochen her oder noch nie"],['#b-rnd',"Wählt zufällig Übungen aus"],['#g-ai',"Claude schreibt daraus ein ganzes Spiel"],['#b-save',"Legt das Spiel als Idee im Lexikon ab"],['#sb-make',"Schlägt eine Stunde mit Alternativen vor"],['#sb-heute',"Legt die Stunde in „Für heute“"]];
+var TIPS=[['.nav button[data-v="start"]',"Schnelle Auswahl nach Situation"],['.nav button[data-v="lex"]',"Alle Spiele und Übungen"],['.nav button[data-v="bauen"]',"Spiel oder Stunde zusammenstellen"],['.subnav button[data-v="bauen"]',"Neues Spiel aus Übungen"],['.nav button[data-v="stunde"]',"Stunde aus dem Lexikon vorschlagen"],['.nav button[data-v="heute"]',"Deine Auswahl fürs nächste Training"],['#rnd',"Zeigt ein zufälliges Spiel"],['#newbtn',"Eigenes Spiel oder Übung anlegen"],['#more',"Filter: Mobilität, Kategorie, Material, Dauer"],['#quick [data-o="kurz"]',"bis 5 Minuten"],['#all',"Zeigt alle Karten mit allen Details"],['#reset',"Zeigt wieder alle Einträge"],['.det [data-heute]',"Merkt den Eintrag fürs nächste Training"],['[data-karte]',"Speichert die Karte zum Ausdrucken"],['[data-edit]',"Text, Tafel und Stichworte ändern"],['[data-build]',"Öffnet „Spiel bauen“ mit dieser Übung"],['#h-save',"Alle Karten zum Ausdrucken"],['#h-clr',"Leert deine Auswahl"],['[data-gesp]',"Merkt das Datum. Nur du siehst es."],['[data-vote]',"Zählt als Daumen auf der Karte"],['#fontbtn',"Schrift größer oder normal"],['#quick [data-o="Favoriten"]',"Nur Einträge mit deinem Stern"],['#quick [data-o="Lange nicht gespielt"]',"Über 4 Wochen her oder noch nie"],['#b-rnd',"Wählt zufällig Übungen aus"],['#g-ai',"Claude schreibt daraus ein ganzes Spiel"],['#b-save',"Legt das Spiel als Idee im Lexikon ab"],['#sb-make',"Schlägt eine Stunde mit Alternativen vor"],['#sb-heute',"Legt die Stunde in „Für heute“"],['.nav button[data-v="abenteuer"]',"Stunde als Fantasie-Geschichte"],['#ab-make',"Setzt Spiele und Geschichte zusammen"],['#ab-heute',"Legt die Spiele in „Für heute“"]];
 var HELP=false;try{HELP=localStorage.getItem("rk-hilfe")==="1"}catch(e){}
 function tipsApply(){TIPS.forEach(function(t){document.querySelectorAll(t[0]).forEach(function(el){if(el.getAttribute("data-tip")!==t[1]){el.setAttribute("data-tip",t[1]);el.title=t[1]}})})}
 function helpSet(on){HELP=on;document.body.classList.toggle("help",on);var b=$("helpbtn");if(b)b.setAttribute("aria-pressed",on);try{localStorage.setItem("rk-hilfe",on?"1":"0")}catch(e){}}
@@ -777,6 +791,133 @@ async function saveBau(){
   var m=$("b-msg");m.textContent="Wird gespeichert …";
   try{await DB.collection("spiele").doc(id).set(d);GEN.ai=null;GEN.err="";m.textContent="Gespeichert als Idee unter „"+catName(c.k)+"“.";setTimeout(function(){goTo(id)},700)}catch(e){m.textContent="Speichern hat nicht geklappt.";m.className="msg err"}
 }
+/* ---------- Abenteuer ---------- */
+var ABW=[
+{id:"meer",n:"Unterwasser",s:"🌊",t:"Die verschwundene Perle",k:"Fische und Meerestiere",a:"Die Perle des Meereskönigs ist weg. Wir suchen sie!",g:"der Hai",sz:"die Perle",m:{h:"Korallen",m:"Insel",s:"Seetang",b:"Perle",t:"Quallen",r:"Höhle"},z:["Der Hai kommt! Erstarren oder verstecken.","Vorsichtig durchs Korallenriff.","Gegen die starke Strömung.","Wettschwimmen zur Insel.","Gemeinsam die Perle aus dem Wrack holen.","Im trüben Wasser Spuren suchen.","Durch das enge Tor im Wrack.","Auf den Wellen treiben."],f:"Die Perle ist zurück, das Meer feiert.",e:"Wir treiben auf den Wellen und schlafen in der Muschel ein."},
+{id:"ritter",n:"Drachen und Ritter",s:"🐉",t:"Die gestohlene Krone",k:"Ritterinnen und Ritter",a:"Der Drache hat die Krone gestohlen. Wir holen sie zurück!",g:"der Drache",sz:"die Krone",m:{h:"Burgtürme",m:"Burg",s:"Zugbrücke",b:"Drachenei",t:"Fahnen",r:"Burgtor",n:"Lanze"},z:["Der Drache speit Feuer! Ausweichen.","Leise über die Zugbrücke.","Das schwere Burgtor aufschieben.","Ritt durchs Königreich.","Gemeinsam die Burg verteidigen.","Drachenspuren im Wald lesen.","Durch das schmale Burgtor.","Am Lagerfeuer ausruhen."],f:"Die Krone ist zurück, das Königreich feiert.",e:"Am Lagerfeuer sitzen. Der Drache schläft endlich."},
+{id:"dschungel",n:"Dschungel-Tiere",s:"🐒",t:"Die verschwundene Trommel",k:"Affen, Tiger und Papageien",a:"Heute ist Dschungelfest, aber die Trommel ist weg. Wir suchen sie!",g:"die Schlange",sz:"die Trommel",m:{h:"Bäume",m:"Flussstein",s:"Liane",b:"Kokosnuss",t:"Blätter",r:"Wasserloch"},z:["Die Schlange zischt! Schnell weg.","Über den Fluss von Stein zu Stein.","An der Liane hochziehen.","Wettrennen wie die Geparden.","Gemeinsam Kokosnüsse sammeln.","Tierstimmen erkennen.","Durch das dichte Gebüsch.","Faultier-Pause."],f:"Die Trommel ist zurück, das Dschungelfest beginnt.",e:"Wie das Faultier in der Hängematte schaukeln."},
+{id:"weltraum",n:"Weltraum",s:"🚀",t:"Die Sternen-Kristalle",k:"Astronautinnen und Astronauten",a:"Unsere Rakete braucht Sternen-Kristalle, sonst kommen wir nicht heim.",g:"das Schwarze Loch",sz:"die Sternen-Kristalle",m:{h:"Planeten",m:"Mond",s:"Sicherungsleine",b:"Meteorit",t:"Sternennebel",r:"Luke",q:"Kristalle"},z:["Meteoriten-Alarm! Ausweichen.","Sanft auf dem Mond landen.","Die Rakete aus dem Krater schieben.","Mit Turbo zum nächsten Planeten.","Gemeinsam die Raumstation reparieren.","Funksignale im All hören.","Durch die enge Luke der Raumstation.","Schwerelos schweben."],f:"Alle Kristalle sind da, die Rakete fliegt heim.",e:"Schwerelos schweben und die Sterne zählen."},
+{id:"zauberwald",n:"Zauberwald",s:"🧚",t:"Der graue Wald",k:"Feen, Zauberer und Waldwesen",a:"Ein Zauber hat den Wald grau gemacht. Wir holen die Farben zurück!",g:"der Troll",sz:"die Zauberblumen",m:{h:"Pilze",m:"Zauberstein",s:"Wurzel",b:"Zauberkugel",t:"Farben",r:"Zauberkreis",n:"Zauberstab"},z:["Der Troll erwacht! Versteinern.","Leise am schlafenden Troll vorbei.","Die schwere Wurzel wegschieben.","Mit dem Zauberwind durch den Wald.","Gemeinsam den Zauberspruch sprechen.","Glühwürmchen im Dunkeln finden.","Durch den engen hohlen Baum.","Still wie der Wald bei Nacht."],f:"Der Wald ist wieder bunt, alle Wesen tanzen.",e:"Auf dem Moos liegen und Glühwürmchen zählen."},
+{id:"dinos",n:"Dinos",s:"🦕",t:"Das verlorene Dino-Ei",k:"kleine Dinos",a:"Ein Dino-Ei ist aus dem Nest gerollt. Wir bringen es zurück!",g:"der T-Rex",sz:"das Dino-Ei",m:{h:"Vulkane",m:"Nest",s:"Lavafluss",b:"Dino-Ei",t:"Farnblätter",r:"Fußspur",q:"Knochen"},z:["Der T-Rex brüllt! Erstarren.","Vorsichtig am Lavafluss vorbei.","Den Felsbrocken vom Höhleneingang schieben.","Flucht vor dem Vulkan.","Gemeinsam das Ei ins Nest bringen.","Dino-Spuren lesen.","Durch die enge Felsspalte.","Die Dinos schlafen im Nest."],f:"Das Ei ist im Nest, ein Baby-Dino schlüpft.",e:"Im Nest einrollen. Der Vulkan schläft."}];
+var ABZ={Reaktion:0,Kontrolle:1,Geschick:1,Gleichgewicht:1,Beweglichkeit:1,Kraft:2,Tempo:3,Ausdauer:3,Teamgeist:4,Wahrnehmung:5,Konzentration:5,Alltag:6,Ruhe:7};
+var ABZN=["Reaktion","Kontrolle und Geschick","Kraft","Tempo und Ausdauer","Teamgeist","Wahrnehmung","Alltag","Ruhe"];
+var ABM={"Hütchen":"h","Matten":"m","Seile/Bänder":"s","Softbälle":"b","Gymnastikball":"b","Basketball/Volleyball":"b","Tücher":"t","Reifen/Ringe":"r","Schwimmnudeln":"n","Beanbags":"q"};
+var ABMN={h:"Hütchen",m:"Matte",s:"Seil",b:"Ball",t:"Tücher",r:"Reifen",n:"Schwimmnudel",q:"Beanbags"};
+var ABPH={B:{n:"Begrüßen",k:16,ok:function(g){return g.status!=="idee"&&(g.f.indexOf("Kreis")>-1||+g.k===16)&&g.d!=="lang"}},
+ A:{n:"Aufwärmen",k:1,ok:function(g){return g.status!=="idee"&&!isUeb(g)&&(+g.k===1||+g.k===2)}},
+ H:{n:"Hauptspiel",k:7,ok:function(g){return g.status!=="idee"&&!isUeb(g)&&[2,3,4,5,6,7,9,10,11].indexOf(+g.k)>-1}},
+ E:{n:"Abschluss",k:8,ok:function(g){return g.status!=="idee"&&!isUeb(g)&&+g.k===8}}};
+var ABSPLIT={45:[["B",5],["A",10],["H",15],["E",10]],60:[["B",5],["A",10],["H",15],["H",15],["E",10]],90:[["B",5],["A",15],["H",20],["H",20],["H",15],["E",10]]};
+var AB={dur:60,mob:[],mat:[],grp:"mittel",welt:"zufall",mode:"auto",open:true,plan:null,w:0,msg:"",edit:-1,cur:null,saved:[],ask:false},ADOC=null;
+(function(){try{var s=JSON.parse(localStorage.getItem("rk-abenteuer-in")||"null");if(s){["dur","mob","mat","grp","welt","mode"].forEach(function(k){if(s[k]!=null)AB[k]=s[k]})}}catch(e){}})();
+function abRemember(){try{localStorage.setItem("rk-abenteuer-in",JSON.stringify({dur:AB.dur,mob:AB.mob,mat:AB.mat,grp:AB.grp,welt:AB.welt,mode:AB.mode}))}catch(e){}}
+function abWelt(){return ABW[AB.w]||ABW[0]}
+function abFits(g){for(var i=0;i<AB.mob.length;i++)if(g.mobs.indexOf(AB.mob[i])<0)return false;if(AB.mat.length){for(var j=0;j<g.mats.length;j++)if(AB.mat.indexOf(g.mats[j])<0&&BASIS.indexOf(g.mats[j])<0)return false}return true}
+function abScore(g){var s=Math.random()*3;if(AB.grp==="klein"&&g.f.indexOf("Staffel")>-1)s-=2;if(AB.grp==="gross"&&g.f.some(function(f){return ["Staffel","Fänger","Kreis","Freies Fahren"].indexOf(f)>-1}))s+=1.5;if(AB.grp==="gross"&&g.f.indexOf("Paare")>-1)s-=1;if(g.arm.length)s+=.5;return s}
+function abCands(ph,used){var P=ABPH[ph],l=G.filter(function(g){return P.ok(g)&&abFits(g)});if(ph==="B"&&!l.length)l=G.filter(function(g){return ABPH.A.ok(g)&&abFits(g)});
+  return l.map(function(g){return{id:g.id,s:abScore(g)-(used.indexOf(g.id)>-1?50:0)}}).sort(function(a,b){return b.s-a.s}).map(function(x){return x.id})}
+function abUsed(skip){var u=[];(AB.plan||[]).forEach(function(c,i){if(i!==skip&&c.i>-1&&c.ids[c.i])u.push(c.ids[c.i])});return u}
+function abFill(c,idx){var used=abUsed(idx);c.ids=abCands(c.ph,used);c.i=AB.mode==="plan"?-1:(c.ids.length?0:-1);if(c.i===0&&used.indexOf(c.ids[0])>-1)c.i=-1}
+function abMake(){AB.w=AB.welt==="zufall"?Math.floor(Math.random()*ABW.length):Math.max(0,ABW.map(function(w){return w.id}).indexOf(AB.welt));
+  var old=AB.plan;AB.plan=[];AB.cur=null;
+  ABSPLIT[AB.dur].forEach(function(p,i){var c={ph:p[0],min:p[1],ids:[],i:-1,lock:false,txt:null};AB.plan.push(c);abFill(c,i)});
+  AB.open=false;AB.edit=-1;AB.msg="";abRemember()}
+function abReroll(){AB.plan.forEach(function(c,i){if(!c.lock){c.txt=null;abFill(c,i)}});AB.msg=""}
+function abG(c){return c.i>-1?byId(c.ids[c.i]):null}
+function abLine(c){var w=abWelt();if(c.txt)return c.txt;if(c.ph==="B")return "Ihr seid "+w.k+". "+w.a;if(c.ph==="E")return w.e;var g=abG(c);if(!g)return "";
+  for(var i=0;i<g.z.length;i++)if(ABZ[g.z[i]]!=null)return w.z[ABZ[g.z[i]]];return w.z[c.ph==="A"?3:4]}
+function abPack(){var p=[];(AB.plan||[]).forEach(function(c){var g=abG(c);if(g)g.mats.forEach(function(m){if(p.indexOf(m)<0)p.push(m)})});return p}
+function abMatLine(){var w=abWelt(),pack=abPack(),keys=[];pack.forEach(function(m){var k=ABM[m];if(k&&w.m[k]&&keys.indexOf(k)<0)keys.push(k)});if(!keys.length)keys=Object.keys(w.m);return keys.map(function(k){return ABMN[k]+" = "+w.m[k]}).join(" · ")}
+function abSum(){return (AB.plan||[]).reduce(function(a,c){return a+c.min},0)}
+function abGroups(){return MYG.concat(SHG)}
+function renderAbenteuer(){
+  var h="";
+  if(!G.length){$("ab-in").innerHTML='<p class="msg">Die Einträge werden geladen …</p>';$("ab-out").innerHTML="";return}
+  if(AB.open||!AB.plan){
+    var gs=abGroups();
+    if(gs.length)h+='<div class="gstep"><p class="fl">Gruppe <span class="hint">füllt Mobilität, Größe und Material aus</span></p><div class="chips">'+gs.map(function(g,i){return '<button type="button" class="chip" data-abgr="'+i+'">'+esc(g.name)+'</button>'}).join("")+'</div></div>';
+    h+='<div class="gstep"><p class="fl">Welt</p><div class="chips"><button type="button" class="chip" data-abw="zufall" aria-pressed="'+(AB.welt==="zufall")+'">🎲 Überrasch mich</button>'+ABW.map(function(w){return '<button type="button" class="chip" data-abw="'+w.id+'" aria-pressed="'+(AB.welt===w.id)+'">'+w.s+' '+esc(w.n)+'</button>'}).join("")+'</div></div>';
+    h+='<div class="gstep"><p class="fl">Dauer</p>'+chipRow("data-abd",["45","60","90"],function(o){return AB.dur===+o},function(o){return o+" Min"})+'</div>';
+    h+='<div class="gstep"><p class="fl">Mobilität der Gruppe <span class="hint">alle Stufen antippen, die dabei sind</span></p>'+chipRow("data-abm",["1","2","3","4","5"],function(o){return AB.mob.indexOf(+o)>-1},function(o){return o+" "+mobName(o)})+'</div>';
+    h+='<div class="gstep"><p class="fl">Gruppengröße</p>'+chipRow("data-abg",["klein","mittel","gross"],function(o){return AB.grp===o},function(o){return GRP[o]})+'</div>';
+    h+='<div class="gstep"><p class="fl">Material, das du dabei hast <span class="hint">nichts gewählt = alles möglich</span></p>'+chipRow("data-abmat",CFG.mats,function(o){return AB.mat.indexOf(o)>-1})+'</div>';
+    h+='<div class="gstep"><p class="fl">Wie willst du starten?</p><div class="chips"><button type="button" class="chip" data-abmode="auto" aria-pressed="'+(AB.mode==="auto")+'">Überraschen</button><button type="button" class="chip" data-abmode="plan" aria-pressed="'+(AB.mode==="plan")+'">Selbst planen</button></div><p class="hint" style="margin:0">'+(AB.mode==="auto"?"Die Seite wählt für jedes Kapitel ein Spiel.":"Die Kapitel sind leer. Mit ‹ › blätterst du durch passende Spiele.")+'</p></div>';
+    h+='<div class="rowb"><button type="button" class="btn" id="ab-make">Abenteuer erzeugen</button>'+(AB.plan?'<button type="button" class="btn2" id="ab-close">Zurück zum Abenteuer</button>':'')+'</div>';
+  }else{
+    h+='<div class="abline"><span>'+abWelt().s+' '+esc(abWelt().n)+' · '+AB.dur+' Min · '+(AB.mob.length?mobRange(AB.mob):"alle Stufen")+' · '+esc(GRP[AB.grp])+(AB.mat.length?' · '+AB.mat.length+' Material':'')+'</span><button type="button" class="link" id="ab-open">Ändern</button></div>';
+  }
+  $("ab-in").innerHTML=h;renderAbOut();
+}
+function renderAbOut(){
+  var h="";
+  if(AB.plan&&!AB.open){
+    var w=abWelt(),tot=abSum(),buf=AB.dur-tot;
+    h+='<div class="out"><div class="abt">'+w.s+' '+esc(w.t)+'</div><p class="meta" style="font-size:14px">Ihr seid '+esc(w.k)+'. Gegenspieler: '+esc(w.g)+'. Schatz: '+esc(w.sz)+'.</p>';
+    h+='<div class="abbar">'+AB.plan.map(function(c){return '<i style="flex:'+c.min+';'+kst(ABPH[c.ph].k)+'"></i>'}).join("")+(buf>0?'<i class="buf" style="flex:'+buf+'"></i>':'')+'</div><p class="meta">'+tot+' von '+AB.dur+' Min · '+(buf>0?buf+' Min Puffer':buf<0?(-buf)+' Min zu viel':'kein Puffer')+'</p>';
+    var hn=0;
+    AB.plan.forEach(function(c,i){var g=abG(c),P=ABPH[c.ph],nm=c.ph==="H"?P.n+" "+(++hn):P.n;
+      h+='<div class="abk" style="'+kst(P.k)+'"><div class="abh"><span class="sbp">'+esc(nm)+' · <button type="button" class="link" data-abmin="'+i+'" aria-label="Minuten ändern">'+c.min+' Min</button></span>'+(c.lock?'<span class="tag">festgehalten</span>':'')+'</div>';
+      h+='<div class="abg"><button type="button" class="btn3" data-abnav="'+i+'|-1" aria-label="Voriges Spiel">‹</button>'+(g?'<button type="button" class="sbn" data-go="'+esc(g.id)+'">'+esc(g.n)+'</button>':'<span class="msg">'+(c.ids.length?'Mit ‹ › ein Spiel wählen':'Nichts passt. Nimm eine Stufe oder ein Material weg.')+'</span>')+'<button type="button" class="btn3" data-abnav="'+i+'|1" aria-label="Nächstes Spiel">›</button>'+(c.ids.length&&c.i>-1?'<span class="meta">'+(c.i+1)+' von '+c.ids.length+'</span>':'')+'</div>';
+      if(AB.edit===i)h+='<form class="rowb" id="ab-ef" data-i="'+i+'"><input id="ab-et" type="text" maxlength="200" value="'+esc(abLine(c))+'" style="flex:1;min-width:200px"><button class="btn3" type="submit">Fertig</button><button class="btn3" type="button" data-abtxt="'+i+'">Original</button></form>';
+      else h+='<p class="abs">'+esc(abLine(c))+'</p>';
+      if(g){h+='<div class="rowb">'+mobMeter(g.mobs)+(g.arm.length?'<span class="tag arm">Arm/Hand angepasst</span>':'')+'</div>';
+        if(g.arm.length&&(AB.mob.indexOf(1)>-1||AB.mob.indexOf(2)>-1))h+='<p class="meta"><b>Für wenig Mobilität:</b> '+esc(g.arm[0])+'</p>'}
+      h+='<div class="rowb"><button type="button" class="btn3" data-abed="'+i+'">✏️ Text</button><button type="button" class="btn3" data-ablock="'+i+'" aria-pressed="'+c.lock+'">'+(c.lock?'🔒 Festgehalten':'🔓 Festhalten')+'</button><button type="button" class="btn3" data-abdel="'+i+'">Kapitel löschen</button></div></div>';
+    });
+    h+='<div class="abk" style="'+kst(9)+'"><span class="sbp">🎉 Finale</span><p class="abs">'+esc(w.f)+'</p></div>';
+    h+='<div class="rowb"><button type="button" class="btn3" id="ab-add">+ Hauptspiel</button></div>';
+    var pack=abPack();h+='<p class="meta"><b>Material wird zu:</b> '+esc(abMatLine())+'</p><p class="meta"><b>Packliste:</b> '+(pack.length?pack.map(esc).join(", "):"ohne Material")+'</p>';
+    if(AB.ask)h+='<form class="rowb" id="ab-sf"><input id="ab-name" type="text" maxlength="60" value="'+esc(AB.cur?((AB.saved.filter(function(s){return s.id===AB.cur})[0]||{}).name||w.t):w.t)+'" style="flex:1;min-width:180px" aria-label="Name"><button class="btn" type="submit">Speichern</button><button class="btn3" type="button" id="ab-nosave">Abbrechen</button></form>';
+    else h+='<div class="rowb"><button type="button" class="btn" id="ab-save">'+(AB.cur?'Änderungen speichern':'Speichern')+'</button><button type="button" class="btn2" id="ab-heute">In „Für heute“</button><button type="button" class="btn3" id="ab-roll">🎲 Neu würfeln</button><button type="button" class="btn3" id="ab-welt">Welt wechseln</button></div>';
+    h+='<p class="msg" id="ab-msg" role="status">'+esc(AB.msg)+'</p></div>';
+  }
+  h+='<div><h3 style="font-family:var(--f-display);margin:10px 0 6px">Meine Abenteuer</h3>';
+  if(!ME)h+='<p class="msg">Speichern geht nur, wenn du angemeldet bist.</p>';
+  else if(!AB.saved.length)h+='<p class="msg">Noch keine. Erzeuge ein Abenteuer und tippe auf „Speichern“.</p>';
+  else h+='<div class="sbs">'+AB.saved.map(function(s,i){var w=ABW.filter(function(x){return x.id===s.welt})[0]||ABW[0];return '<div class="hi" style="'+kst(9)+'"><div class="t"><b>'+w.s+' '+esc(s.name)+'</b><span>'+s.dur+' Min · '+esc(w.n)+' · '+s.plan.length+' Kapitel · '+dmy(s.am)+'</span></div><div class="rowb"><button type="button" class="btn3" data-abload="'+i+'">Öffnen</button><button type="button" class="btn3" data-abx="'+i+'">Löschen</button></div></div>'}).join("")+'</div>';
+  h+='</div>';
+  $("ab-out").innerHTML=h;
+}
+function abPersist(){if(!ADOC)return Promise.reject(new Error("nein"));return ADOC.set({list:AB.saved})}
+function abSaveNow(name){var o={id:AB.cur||("a"+Date.now().toString(36)),name:name,am:today(),welt:abWelt().id,dur:AB.dur,mob:AB.mob.slice(),mat:AB.mat.slice(),grp:AB.grp,plan:AB.plan.map(function(c){return{ph:c.ph,min:c.min,id:c.i>-1?c.ids[c.i]:"",txt:c.txt||"",lock:!!c.lock}})};
+  var old=AB.saved.slice(),ix=-1;AB.saved.forEach(function(s,i){if(s.id===o.id)ix=i});if(ix>-1)AB.saved[ix]=o;else AB.saved.unshift(o);
+  AB.ask=false;AB.msg="Wird gespeichert …";renderAbOut();
+  abPersist().then(function(){AB.cur=o.id;AB.msg="Gespeichert als „"+name+"“.";renderAbOut()}).catch(function(){AB.saved=old;AB.msg="Speichern hat nicht geklappt. Versuche es noch einmal.";renderAbOut()})}
+function abLoad(s){AB.dur=s.dur;AB.mob=(s.mob||[]).map(Number);AB.mat=(s.mat||[]).slice();AB.grp=s.grp||"mittel";AB.w=Math.max(0,ABW.map(function(w){return w.id}).indexOf(s.welt));
+  AB.plan=s.plan.map(function(p){return{ph:p.ph,min:p.min,ids:[],i:-1,lock:!!p.lock,txt:p.txt||null}});
+  AB.plan.forEach(function(c,i){var want=s.plan[i].id,l=abCands(c.ph,[]);var k=l.indexOf(want);if(k>-1)l.splice(k,1);if(want&&byId(want))l.unshift(want);c.ids=l;c.i=want&&byId(want)?0:-1});
+  AB.cur=s.id;AB.open=false;AB.edit=-1;AB.ask=false;AB.msg="Geöffnet: „"+s.name+"“."}
+function abClick(t){var b;
+  if((b=t.closest("[data-abgr]"))){var g=abGroups()[+b.dataset.abgr];if(g){AB.mob=(g.mob||[]).map(Number);AB.grp=g.grp||"mittel";AB.mat=(g.mat||[]).slice()}renderAbenteuer();return true}
+  if((b=t.closest("[data-abw]"))){AB.welt=b.dataset.abw;renderAbenteuer();return true}
+  if((b=t.closest("[data-abd]"))){AB.dur=+b.dataset.abd;renderAbenteuer();return true}
+  if((b=t.closest("[data-abm]"))){sbTog(AB.mob,+b.dataset.abm);renderAbenteuer();return true}
+  if((b=t.closest("[data-abg]"))){AB.grp=b.dataset.abg;renderAbenteuer();return true}
+  if((b=t.closest("[data-abmat]"))){sbTog(AB.mat,b.dataset.abmat);renderAbenteuer();return true}
+  if((b=t.closest("[data-abmode]"))){AB.mode=b.dataset.abmode;renderAbenteuer();return true}
+  if(t.id==="ab-make"){abMake();renderAbenteuer();return true}
+  if(t.id==="ab-open"){AB.open=true;renderAbenteuer();return true}
+  if(t.id==="ab-close"){AB.open=false;renderAbenteuer();return true}
+  if(!AB.plan)return false;
+  if((b=t.closest("[data-abnav]"))){var q=b.dataset.abnav.split("|"),c=AB.plan[+q[0]];if(c&&c.ids.length){c.i=c.i<0?(+q[1]>0?0:c.ids.length-1):(c.i+(+q[1])+c.ids.length)%c.ids.length;if(c.ph!=="B"&&c.ph!=="E")c.txt=null}AB.msg="";renderAbOut();return true}
+  if((b=t.closest("[data-abmin]"))){var c2=AB.plan[+b.dataset.abmin],st=[5,10,15,20,25,30],k=st.indexOf(c2.min);c2.min=st[(k+1)%st.length];renderAbOut();return true}
+  if((b=t.closest("[data-abed]"))){AB.edit=+b.dataset.abed;renderAbOut();var inp=$("ab-et");if(inp){inp.focus();inp.select()}return true}
+  if((b=t.closest("[data-abtxt]"))){AB.plan[+b.dataset.abtxt].txt=null;AB.edit=-1;renderAbOut();return true}
+  if((b=t.closest("[data-ablock]"))){var c3=AB.plan[+b.dataset.ablock];c3.lock=!c3.lock;renderAbOut();return true}
+  if((b=t.closest("[data-abdel]"))){if(b.dataset.sure!=="1"){b.dataset.sure="1";b.textContent="Wirklich löschen?";return true}AB.plan.splice(+b.dataset.abdel,1);AB.edit=-1;renderAbOut();return true}
+  if(t.id==="ab-add"){var ix=AB.plan.length;for(var j=AB.plan.length-1;j>=0;j--)if(AB.plan[j].ph==="E"){ix=j;break}var nc={ph:"H",min:15,ids:[],i:-1,lock:false,txt:null};AB.plan.splice(ix,0,nc);abFill(nc,ix);renderAbOut();return true}
+  if(t.id==="ab-roll"){abReroll();renderAbOut();return true}
+  if(t.id==="ab-welt"){AB.w=(AB.w+1)%ABW.length;AB.plan.forEach(function(c){if(!c.lock)c.txt=null});AB.msg="Neue Welt: "+abWelt().n+". Die Spiele bleiben gleich.";renderAbenteuer();return true}
+  if(t.id==="ab-save"){if(!ME||!ADOC){AB.msg="Speichern geht nur, wenn du angemeldet bist.";renderAbOut();return true}AB.ask=true;renderAbOut();var n=$("ab-name");if(n){n.focus();n.select()}return true}
+  if(t.id==="ab-nosave"){AB.ask=false;renderAbOut();return true}
+  if(t.id==="ab-heute"){var ids=AB.plan.map(function(c){return c.i>-1?c.ids[c.i]:""}).filter(function(id){return !!byId(id)});EIN=ids;saveEin();$("hcnt").textContent=EIN.length;AB.msg="Übernommen. Du findest die Spiele unter „Für heute“ mit Packliste.";renderAbOut();return true}
+  if((b=t.closest("[data-abload]"))){var s=AB.saved[+b.dataset.abload];if(s){abLoad(s);renderAbenteuer();$("ab-in").scrollIntoView({behavior:"smooth",block:"start"})}return true}
+  if((b=t.closest("[data-abx]"))){if(b.dataset.sure!=="1"){b.dataset.sure="1";b.textContent="Wirklich löschen?";return true}var di=+b.dataset.abx,gone=AB.saved.splice(di,1)[0];if(gone&&gone.id===AB.cur)AB.cur=null;abPersist().catch(function(){});renderAbOut();return true}
+  return false}
+function abSubmit(f){
+  if(f.id==="ab-ef"){var i=+f.dataset.i,v=$("ab-et").value.trim(),c=AB.plan[i];if(c){var orig=c.txt;c.txt=null;var def=abLine(c);c.txt=v&&v!==def?v:null}AB.edit=-1;renderAbOut();return true}
+  if(f.id==="ab-sf"){var nm=$("ab-name").value.trim();if(!nm){AB.msg="Gib dem Abenteuer zuerst einen Namen.";renderAbOut();return true}abSaveNow(nm);return true}
+  return false}
 /* ---------- Stunde bauen ---------- */
 var SB={dur:50,mob:[],z:[],mat:[],grp:"mittel",plan:null,saved:[],msg:""},SDOC=null;
 var SPLIT={45:[10,10,15,10],50:[10,10,20,10],60:[10,15,25,10],90:[15,20,40,15]};
@@ -974,13 +1115,14 @@ document.addEventListener("click",function(ev){var t=ev.target;if(!t.closest)ret
   o.appendChild(sv.cloneNode(true));var s=document.createElement("span");s.textContent="Tippen zum Schließen";o.appendChild(s);document.body.appendChild(o);try{o.focus()}catch(e){}});
 document.addEventListener("keydown",function(ev){if(ev.key==="Escape")zoomClose()});
 /* ---------- Ansichten ---------- */
-function setView(v){view=v;["start","lex","bauen","stunde","heute","pass"].forEach(function(x){$("v-"+x).hidden=x!==v});document.querySelectorAll(".nav button").forEach(function(b){if(b.dataset.v===v||(v==="stunde"&&b.dataset.v==="bauen"&&!b.closest(".subnav")))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});try{if(location.hash!=="#"+v)history.replaceState(null,"","#"+v)}catch(e){}renderAll()}
-function renderAll(){$("hcnt").textContent=EIN.length;if(view==="start"){if(GED)gedRead();renderStart()}else if(view==="lex")renderList();else if(view==="bauen")renderBau();else if(view==="stunde")renderStunde();else if(view==="heute")renderHeute();else renderPass();$("newbtn").hidden=!(DB&&CANW!==false);$("appx").hidden=!(DLS&&G.length)}
+function setView(v){view=v;["start","lex","bauen","stunde","abenteuer","heute","pass"].forEach(function(x){$("v-"+x).hidden=x!==v});document.querySelectorAll(".nav button").forEach(function(b){if(b.dataset.v===v||(v==="stunde"&&b.dataset.v==="bauen"&&!b.closest(".subnav")))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});try{if(location.hash!=="#"+v)history.replaceState(null,"","#"+v)}catch(e){}renderAll()}
+function renderAll(){$("hcnt").textContent=EIN.length;if(view==="start"){if(GED)gedRead();renderStart()}else if(view==="lex")renderList();else if(view==="bauen")renderBau();else if(view==="stunde")renderStunde();else if(view==="abenteuer")renderAbenteuer();else if(view==="heute")renderHeute();else renderPass();$("newbtn").hidden=!(DB&&CANW!==false);$("appx").hidden=!(DLS&&G.length)}
 function goTo(id){pick=null;openIds[id]=1;$("q").value="";for(var k in sel)sel[k]=[];buildFilters();setView("lex");setTimeout(function(){var c=document.querySelector('.card[data-id="'+id+'"]');if(c)c.scrollIntoView({behavior:"smooth",block:"start"})},60)}
 /* ---------- Events ---------- */
 document.addEventListener("click",function(e){
   var t=e.target,b;
   if((b=t.closest(".nav button"))){setView(b.dataset.v);return}
+  if(view==="abenteuer"&&abClick(t))return;
   if((b=t.closest("[data-fav]"))){e.preventDefault();toggleFav(b.dataset.fav,b);return}
   if((b=t.closest("[data-gesp]"))){toggleGesp(b.dataset.gesp);return}
   if((b=t.closest("[data-vote]"))){var vq=b.dataset.vote.split("|");vote(vq[0],vq[1],b);return}
@@ -1063,6 +1205,7 @@ document.addEventListener("toggle",function(e){var d=e.target;if(!d.classList||!
 document.addEventListener("submit",function(e){
   var f=e.target;e.preventDefault();
   if(f.id==="edf"){saveEditor();return}
+  if(abSubmit(f))return;
   if(f.id==="s-form"){$("q").value=$("sq").value;pick=null;setView("lex");return}
   if(f.id==="sb-form"){var nm=$("sb-name").value.trim();if(!nm){SB.msg="Gib der Stunde zuerst einen Namen.";renderSbOut();$("sb-name").focus();return}
     SB.saved.unshift({name:nm,am:today(),dur:SB.dur,plan:JSON.parse(JSON.stringify(SB.plan))});SB.msg="Wird gespeichert …";renderSbOut();
@@ -1072,10 +1215,10 @@ document.addEventListener("submit",function(e){
 });
 document.addEventListener("change",function(e){var t=e.target,eb=t.closest&&t.closest("[data-eb]");if(eb&&t.dataset.ebsel){var st=EB[eb.dataset.eb];if(t.dataset.ebsel==="u")st.u=t.value;else st.slot=+t.value;eb.outerHTML=einbauHTML(byId(eb.dataset.eb))}});
 $("q").addEventListener("input",function(){pick=null;renderList()});
-window.addEventListener("hashchange",function(){var v=location.hash.slice(1);if(["start","lex","bauen","stunde","heute"].indexOf(v)>-1&&v!==view)setView(v)});
+window.addEventListener("hashchange",function(){var v=location.hash.slice(1);if(["start","lex","bauen","stunde","abenteuer","heute"].indexOf(v)>-1&&v!==view)setView(v)});
 /* ---------- Start ---------- */
 loadEin();loadMein();buildFilters();
-(function(){var v=location.hash.slice(1);setView(["start","lex","bauen","stunde","heute"].indexOf(v)>-1?v:"start")})();
+(function(){var v=location.hash.slice(1);setView(["start","lex","bauen","stunde","abenteuer","heute"].indexOf(v)>-1?v:"start")})();
 (async function(){
   try{U=await claude.use("user")}catch(e){U=null}
   if(U){try{ME=await U.id()}catch(e){}try{CANW=await U.can("data.write")}catch(e){}}
@@ -1087,6 +1230,7 @@ loadEin();loadMein();buildFilters();
   if(ME){GDOC=db.collection("data/users/"+ME).doc("gruppen");GDOC.get().then(function(s){var d=s&&s.data&&s.data();if(d&&Array.isArray(d.list))MYG=d.list;if(view==="start")renderAll()}).catch(function(){})}
   db.collection("gruppen").onSnapshot(function(snap){SHG=snap.docs.map(function(d){var x=d.data();x.id=d.id;return x}).filter(function(x){return x.von!==ME});if(view==="start")renderAll()},function(){});
   if(ME){SDOC=db.collection("data/users/"+ME).doc("stunden");SDOC.get().then(function(s){var d=s&&s.data&&s.data();if(d&&Array.isArray(d.list))SB.saved=d.list;if(view==="stunde")renderSbOut()}).catch(function(){})}
+  if(ME){ADOC=db.collection("data/users/"+ME).doc("abenteuer");ADOC.get().then(function(s){var d=s&&s.data&&s.data();if(d&&Array.isArray(d.list))AB.saved=d.list;if(view==="abenteuer")renderAbOut()}).catch(function(){})}
   if(ME){MDOC=db.collection("data/users/"+ME).doc("mein");MDOC.get().then(function(s){var d=s&&s.data&&s.data();if(d&&(d.fav||d.gesp)){meinSet(d);try{localStorage.setItem("rk-mein",JSON.stringify({fav:FAV,gesp:GESP}))}catch(e){}renderAll()}else if(FAV.length||Object.keys(GESP).length)saveMein()}).catch(function(){})}
   if(ME){EDOC=db.collection("data/users/"+ME).doc("einheit");EDOC.get().then(function(s){var d=s&&s.data&&s.data();if(d&&Array.isArray(d.ids)&&d.ids.length){EIN=d.ids;try{localStorage.setItem("rk-heute",JSON.stringify(EIN))}catch(e){}renderAll()}else if(EIN.length)saveEin()}).catch(function(){})}
   db.doc("config/lexikon").onSnapshot(function(s){var d=s&&s.data&&s.data();CFG=JSON.parse(JSON.stringify(DEF));if(d){["cats","ziele","formen","mats","rahmen","mobs"].forEach(function(k){if(d[k])CFG[k]=k==="cats"?Object.assign(CFG.cats,d[k]):d[k]})}G.forEach(prep);buildFilters();renderAll()},function(){});
